@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 #define AU      1
-#define STARTX  1
+#define STARTX  1 
 #define STARTY  0
 #define STARTT  0
 #define ENDT    10000
