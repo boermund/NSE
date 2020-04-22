@@ -1,4 +1,7 @@
 // Tom Jungnickel 18.5.19 Semniar 3
+
+// holla
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
