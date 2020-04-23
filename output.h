@@ -13,7 +13,7 @@ void output(cell *field,int imax,int jmax)
             fprintf(vspeed,"%.6f\t",field[i+imax*j].u);
             fprintf(uspeed,"%.6f\t",field[i+imax*j].v);
             fprintf(pressure,"%.6f\t",field[i+imax*j].p);
-            //printf("%d",i+jmax*j);
+            //printf("%d",i+imax*j);
         }
         fprintf(vspeed,"\n");
         fprintf(uspeed,"\n");
