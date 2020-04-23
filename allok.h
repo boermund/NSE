@@ -7,4 +7,6 @@
 cell *fieldalloc(int i, int j){
     cell *field;
     field = calloc(i*j,sizeof(cell));
+    return field;
+    
 }
