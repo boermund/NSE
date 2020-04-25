@@ -8,8 +8,8 @@
 #define RE      100
 #define A       5.0
 #define B       5.0
-#define IMAX    100
-#define JMAX    100 
+#define IMAX    10
+#define JMAX    10 
 #define UMAX    100
 #define VMAX    100
 #define TAU     0.5 //Factor for adaptive step control
@@ -29,6 +29,7 @@ typedef struct
 #include "allok.h"
 #include "output.h"
 #include "timecontrol.h"
+#include "ghostcell.h"
 
 //main
 void main(){
@@ -38,6 +39,9 @@ void main(){
     dy= B/JMAX;
     a=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     timestep=timecontrol(a,TAU,IMAX,JMAX,dx,dy,RE);
-    printf("%f",timestep);
+    //printf("%f",timestep);
+    for(int z=0;z<IMAX*JMAX;z++)
+        a[z].u=a[z].v=3;
+    cavity(a,IMAX,JMAX);
     output(a,IMAX,JMAX);
 }
