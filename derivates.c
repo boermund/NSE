@@ -40,8 +40,6 @@ void main(){
 
     b = put_xy_in_file(IMAX,JMAX,dx,dy);
 
-    
-
 //Funktionswerte berechnen und in ein File schreiben
     FILE * testfile_u;
     testfile_u = fopen("testfunc_u.txt", "w+");

@@ -10,8 +10,8 @@ void output(cell *field,int imax,int jmax)
     pressure = fopen ("pressure.txt","w+");
     for(int j=0;j<jmax;j++){
         for(int i=0;i<imax;i++){
-            fprintf(vspeed,"%.6f\t",field[i+imax*j].u);
-            fprintf(uspeed,"%.6f\t",field[i+imax*j].v);
+            fprintf(vspeed,"%.6f\t",field[i+imax*j].v);
+            fprintf(uspeed,"%.6f\t",field[i+imax*j].u);
             fprintf(pressure,"%.6f\t",field[i+imax*j].p);
             //printf("%d",i+imax*j);
         }
