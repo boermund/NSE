@@ -32,7 +32,11 @@ typedef struct
 void main(){
     cell *a;
 
-    a=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
+    a = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
 
     output(a,IMAX,JMAX);
+    
+    printf("%.6f", a->v);
 }
+
+
