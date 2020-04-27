@@ -34,6 +34,9 @@ typedef struct
 //main
 void main(){
     cell *a;
+
+    a = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
+
     float dx,dy,timestep;
     dx = A/IMAX;
     dy= B/JMAX;
@@ -44,4 +47,8 @@ void main(){
         a[z].u=a[z].v=3;*/
     cavity(a,IMAX,JMAX);
     output(a,IMAX,JMAX);
+    
+    printf("%.6f", a->v);
 }
+
+
