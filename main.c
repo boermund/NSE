@@ -39,9 +39,9 @@ void main(){
     dy= B/JMAX;
     a=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     timestep=timecontrol(a,TAU,IMAX,JMAX,dx,dy,RE);
-    //printf("%f",timestep);
+    /*printf("%f",timestep);
     for(int z=0;z<IMAX*JMAX;z++)
-        a[z].u=a[z].v=3;
+        a[z].u=a[z].v=3;*/
     cavity(a,IMAX,JMAX);
     output(a,IMAX,JMAX);
 }
