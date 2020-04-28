@@ -191,7 +191,7 @@ x_nl2_der = fopen("y_nl2_der.txt","w+");
 
 for(int j=0;j<JMAX-2;j++){
     for(int i = 0; i< IMAX; i++){
-        fprintf(x_nl2_der,"%.6f\t", non_l_quad(u_values[IMAX*(j+2)+(i)].u,u_values[IMAX*(j+1)+(i)].u, u_values[IMAX*j+(i)].u, dx));
+        fprintf(x_nl2_der,"%.6f\t", non_l_quad(u_values[IMAX*j+(i+2)].u,u_values[IMAX*j+(i+1)].u, u_values[IMAX*j+(i)].u, dx, ));
     }
     fprintf(x_nl2_der,"\n");
 }
