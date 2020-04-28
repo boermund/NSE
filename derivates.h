@@ -31,7 +31,7 @@ float secondx_d(float xpi ,float x ,float xmi,float dx){
 //du^2/dx
 float non_l_quad(float xpi,float x,float xmi,float dx,float gamma){
     return 1/dx * ( pow(((x+xpi)/2),2) - pow(((xmi+x)/2),2) ) 
-    + gamma * 1/dx * ( ((abs(x + xpi))/2) * ((x-xpi)/2)- ((abs(xmi + x))/2) * ((xmi-x)/2) );
+    + gamma * 1/dx * ( ((fabs(x + xpi))/2) * ((x-xpi)/2)- ((fabs(xmi + x))/2) * ((xmi-x)/2) );
 
 }
 
@@ -47,7 +47,7 @@ float non_l_quad(ypj, y, ymj, dy, gamma){
 // d(uv)/dx
 float non_uvx(float xpj,float x,float xmi,float xmipj,float dx,float ypi,float y,float ymi,float gamma){
     return 1/dx * ( ( ((x+xpj)/2) * ((y+ypi)/2) )  - ( ((xmi + xmipj)/2) * ((ymi+y)/2) ) ) +
-    gamma * 1/dx * (  ((abs(x + xpj))/2) * ((y-ypi)/2) - ((abs(xmi + xmipj))/2) * ((ymi-y)/2) );
+    gamma * 1/dx * (  ((fabs(x + xpj))/2) * ((y-ypi)/2) - ((fabs(xmi + xmipj))/2) * ((ymi-y)/2) );
 
 }
 
@@ -55,12 +55,32 @@ float non_uvx(float xpj,float x,float xmi,float xmipj,float dx,float ypi,float y
 
 float non_uvy(float ypi,float y,float ymj,float ypimj,float dy,float xpj,float x,float xmj,float gamma){
     return 1/dy * ( ( ((y+ypi)/2) * ((x+xpj)/2) )  - ( ((ymj + ypimj)/2) * ((xmj+x)/2) ) ) +
-    gamma * 1/dy * (  ((abs(y + ypi))/2) * ((x-xpj)/2) - ((abs(ymj + ypimj))/2) * ((xmj-x)/2) );
+    gamma * 1/dy * (  ((fabs(y + ypi))/2) * ((x-xpj)/2) - ((fabs(ymj + ypimj))/2) * ((xmj-x)/2) );
 
 }
 
 float testfunc_u(float x,float y){
     return cos(x)*sin(y);
+}
+
+float test_der_u_x(float x, float y){
+    return -sin(x)*sin(y);
+}
+
+float test_der_u_y(float x, float y){
+    return cos(x)*cos(y);
+}
+
+float test_sec_der_x(float x, float y){
+    return -cos(x)*sin(y);
+}
+
+float test_sec_der_y(float x, float y){
+    return cos(x)*(-sin(y));
+}
+
+float test_nl2_der_x(floatx, float y){
+    return 2cos(x)*(-sin(x))*pow(sin(y),2);
 }
 
 float testfunc_v(float x, float y){

@@ -2,15 +2,25 @@
 #include <math.h>
 #include <stdlib.h>
 
-float gamma(u,v,dx,dx,dt){
-    umax = max() //max muüssen noch definiert werden
-    vmax = max()
-    if gamma >= (umax*dt/dx && vmax*dt/dy);
-        continue// hier nochmal befehle anschauen, maxfunktion c?
-    else
-    {
-        gamma = //hier nochmal Bedingungen raussuchen (gamma sollte 1.2 bis 1.5 mal größer sein als der maximale Wert/ s. Quelle 3. Seite 7 oben)
-    }
-    
+float gamma(cell *field, float dt, float dx, int imin, int imax){
+
+    float umax = abs(field[0].u), gamma;
+    for(int j = 0; j< jmax, j++){
+    for(int i =0; i<imax; i++){
+        if(i*j = imax * jmax)
+        {
+            break;
+        }
+        else if (abs(field[imax*j + i+1].u) > abs(field[imax*j + i].u))
+        {
+            umax = abs(field[imax*j + i+1].u);
+        }
+         else{
+             umax = abs(field[imax*j + i].u);
+         }
+
+         printf("%.6f", umax);
+
+         return 1.3 * umax*dt/dx;   //gamma
 
 }

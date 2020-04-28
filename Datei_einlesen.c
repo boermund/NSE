@@ -12,12 +12,12 @@
 
 typedef struct
 {
-    float x;
+    float u;
 } cell;
 
 #include "allok.h"
 #include "read_data.h"
-
+#include "gamma.h"
 
 int main(void) {
 
@@ -35,13 +35,18 @@ int main(void) {
     new = read_data(a, myFile, IMAX,JMAX); //Size of the field plus the edges
     fclose(myFile);
 
-   /* 
-   gibt das Strukt aus
+   
+   //gibt das Strukt aus
    for(int j=0;j<JMAX;j++){
         for(int i=0;i<IMAX;i++){
-        printf("%.6f\t",new[i+IMAX*j].x);}
-    } */
+        printf("%.6f\t",new[i+IMAX*j].u);}
+    } 
 
+    printf("\n");
 
+    float gamma;
+
+    gamma = gamma_v(new,0.001, 0.5, IMAX, JMAX);
+    printf("%.6f", gamma);
     return 0;
 }
