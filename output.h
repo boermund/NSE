@@ -3,16 +3,16 @@
 void output(cell *field,int imax,int jmax)
 {
     FILE * vspeed;
-    vspeed = fopen ("vspeed.txt","w+");
+    vspeed = fopen ("vspeed.csv","w+");
     FILE * uspeed;
-    uspeed = fopen ("uspeed.txt","w+");
+    uspeed = fopen ("uspeed.csv","w+");
     FILE * pressure;
-    pressure = fopen ("pressure.txt","w+");
+    pressure = fopen ("pressure.csv","w+");
     for(int j=0;j<jmax;j++){
         for(int i=0;i<imax;i++){
-            fprintf(vspeed,"%.6f\t",field[i+imax*j].v);
-            fprintf(uspeed,"%.6f\t",field[i+imax*j].u);
-            fprintf(pressure,"%.6f\t",field[i+imax*j].p);
+            fprintf(vspeed,"%.2f,",field[i+imax*j].v);
+            fprintf(uspeed,"%.2f,",field[i+imax*j].u);
+            fprintf(pressure,"%.2f,",field[i+imax*j].p);
             //printf("%d",i+imax*j);
         }
         fprintf(vspeed,"\n");

@@ -2,7 +2,7 @@
 cell* cavity(cell *field,int imax, int jmax)
 {
     int a=0;
-    int b=20;
+    int b=3;
     for(int j = 1;j<jmax-1;j++)
     {
         field[j*(imax)].u           = -field[j*(imax)+1].u;
@@ -14,8 +14,8 @@ cell* cavity(cell *field,int imax, int jmax)
     {
         field[(jmax-1)*imax+i].v    = -field[(jmax-2)*imax+i].v;
         field[(jmax-1)*imax+i].u    = a;
-        field[i+imax].u             = b;
-        printf("%f\n",field[i+imax].u);
+        field[i].u             = b;
+        //printf("%f\n",field[i+imax].u);
         field[i].v                  = -field[i+imax].v;
     }
     return field;

@@ -8,14 +8,15 @@
 #define RE      100
 #define A       5.0
 #define B       5.0
-#define IMAX    10
-#define JMAX    10 
+#define IMAX    33
+#define JMAX    33 
 #define UMAX    100
 #define VMAX    100
 #define TAU     0.5 //Factor for adaptive step control
 #define OMEGA   0.5 //Relaxation Factor
 #define STARTT  0  
 #define STOPT   10
+#define PI      3.14
 
 //structure for filling the array
 typedef struct
@@ -30,6 +31,7 @@ typedef struct
 #include "output.h"
 #include "timecontrol.h"
 #include "ghostcell.h"
+#include "outputtest.h"
 
 //main
 void main(){
@@ -41,14 +43,12 @@ void main(){
     dx = A/IMAX;
     dy= B/JMAX;
     a=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
-    timestep=timecontrol(a,TAU,IMAX,JMAX,dx,dy,RE);
-    //printf("%f",timestep);
-    for(int z=0;z<IMAX*JMAX;z++)
-        a[z].u=a[z].v=3;
-    cavity(a,IMAX,JMAX);
-    output(a,IMAX,JMAX);
-    
-    printf("%.6f", a->v);
+    timestep=timecontrol(a,TAU,IMAX+2,JMAX+2,dx,dy,RE);
+    /*printf("%f",timestep);*/
+    a=outputtest(a,IMAX+2,JMAX+2);
+    a=cavity(a,IMAX+2,JMAX+2);
+    output(a,IMAX+2,JMAX+2);
+    printf("%.2f", a->v);
 }
 
 
