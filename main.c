@@ -35,20 +35,20 @@ typedef struct
 
 //main
 void main(){
-    cell *a;
+    cell *old;
 
-    a = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
+    old = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
 
     float dx,dy,timestep;
     dx = A/IMAX;
     dy= B/JMAX;
-    a=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
-    timestep=timecontrol(a,TAU,IMAX+2,JMAX+2,dx,dy,RE);
+    old=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
+    timestep=timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
     /*printf("%f",timestep);*/
-    a=outputtest(a,IMAX+2,JMAX+2);
-    a=cavity(a,IMAX+2,JMAX+2);
-    output(a,IMAX+2,JMAX+2);
-    printf("%.2f", a->v);
+    old=outputtest(old,IMAX+2,JMAX+2);
+    old=cavity(old,IMAX+2,JMAX+2);
+    output(old,IMAX+2,JMAX+2);
+    printf("%.2f", old->v);
 }
 
 
