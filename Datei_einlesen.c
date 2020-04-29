@@ -2,17 +2,15 @@
 #include <math.h>
 #include <stdlib.h>
 
+/* testfile to write a txt file into a struct an caluculate the gamma value
+*/
 #define IMAX    2
 #define JMAX    6
-
-
-
-//Matrix: SPeicher reservieren
-//#define BUF 255
 
 typedef struct
 {
     float u;
+    float v;
 } cell;
 
 #include "allok.h"
@@ -20,6 +18,18 @@ typedef struct
 #include "gamma.h"
 
 int main(void) {
+
+    FILE *myFile0;
+    myFile0 = fopen("test.txt", "w+");
+
+    float g = 2.3;
+    for(int j = 0; j < JMAX; j++){
+        for( int i= 0; i< IMAX; i++){
+        fprintf(myFile0,"%f\n", ((float)rand()/(float)(RAND_MAX)) * g);}
+        fprintf(myFile0, "\n");
+    }
+
+    fclose(myFile0);
 
     FILE *myFile;
     myFile = fopen("test.txt", "r");
