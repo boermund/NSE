@@ -25,6 +25,7 @@ typedef struct
 #include "derivates.h"
 #include "xandyvalues.h"
 #include "gamma.h"
+#include "testfunc.h"
 
 void main(){
 
