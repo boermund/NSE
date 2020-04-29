@@ -2,8 +2,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define IMAX    20
-#define JMAX    20
+#define IMAX    50
+#define JMAX    50
 #define XMAX    13
 #define YMAX    13
 
@@ -314,7 +314,7 @@ y_nluv_der = fopen("y_nluv_der.txt","w+");
 
 for(int j=0;j<JMAX-2;j++){
     for(int i = 0; i< IMAX-1; i++){
-        fprintf(y_nluv_der,"%.6f\t", non_uvx(u_values[IMAX*(j+1)+(i+1)].v,u_values[IMAX*(j+1)+(i)].v, u_values[IMAX*(j)+(i)].v,u_values[IMAX*(j)+(i+1)].v,  dy, u_values[IMAX*(j+2)+(i)].u,u_values[IMAX*(j+1)+(i)].u, u_values[IMAX*j+(i)].u, gamma));
+        fprintf(y_nluv_der,"%.6f\t", non_uvy(u_values[IMAX*(j+1)+(i+1)].v,u_values[IMAX*(j+1)+(i)].v, u_values[IMAX*(j)+(i)].v,u_values[IMAX*(j)+(i+1)].v,  dy, u_values[IMAX*(j+2)+(i)].u,u_values[IMAX*(j+1)+(i)].u, u_values[IMAX*j+(i)].u, gamma));
     }
     fprintf(y_nluv_der,"\n");
 }
