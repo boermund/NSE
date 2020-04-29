@@ -2,6 +2,10 @@
 #include <math.h>
 #include <stdlib.h>
 
+/* 
+program to test the derivates 
+*/
+
 #define IMAX    50
 #define JMAX    50
 #define XMAX    13
@@ -15,8 +19,8 @@ typedef struct
 
 typedef struct 
 {
-    float x; // lange: IMAX
-    float y; //lange: JMAX
+    float x; 
+    float y; 
 } xandy;
 
 
@@ -29,26 +33,18 @@ typedef struct
 
 void main(){
 
+// define dx and dy and calculate them
     float dx, dy; 
 
     dx = (float)XMAX / (float)IMAX;
     dy =  (float)YMAX / (float)JMAX;
 
-   cell *a;
-
-    a = fieldalloc(IMAX,JMAX); //Size of the field plus the edges
-    // Ziel: Testfunktion u = cos(x)sin(y) eingeben und ableitungen rausgeben. Dazu sollen erstmal werte von 0 bis 5
-
-
-    printf("%.6f\n",dx);
-    printf("%.6f",dy);
-
-
+// put x and y values into a file and in a struct
     xandy *b;
 
     b = put_xy_in_file(IMAX,JMAX,dx,dy);
 
-//Funktionswerte berechnen und in ein File schreiben
+// calculate the values of u  and v
     FILE * testfile_u;
     testfile_u = fopen("testfunc_u.txt", "w+");
 
@@ -64,33 +60,28 @@ void main(){
         fprintf(testfile_v,"\n");
     }
 
-fclose(testfile_u);
-fclose(testfile_v);
+    fclose(testfile_u);
+    fclose(testfile_v);
 
-testfile_u = fopen("testfunc_u.txt", "r");
-testfile_v = fopen("testfunc_v.txt", "r");
-    //int fclose (FILE *testfile_u);
+// write datas into a file
+    testfile_u = fopen("testfunc_u.txt", "r");
+    testfile_v = fopen("testfunc_v.txt", "r");
+
+    cell *a;
+    a = fieldalloc(IMAX,JMAX); 
 
     cell *u_values;
-    a = fieldalloc(IMAX,JMAX);
-
     u_values = read_data(a, testfile_u, testfile_v, IMAX, JMAX);
-fclose(testfile_u);
-fclose(testfile_v);
+
+    fclose(testfile_u);
+    fclose(testfile_v);
     printf("Wert %.6f",u_values[3].v);
 
-    /*for (int i = 0; i< IMAX*JMAX; i++){
-    printf("%f", u_values[i].u);
-    }
+// derivates
+// calculate the analytical and the numerical and put them in seperate files to plot an compare them. 
 
-    fclose(testfile_u);*/
-
-
-    //ABleitungen berechnen: IMAX - 1 mal der differenzenquotient möglich
-
-
-    //Erste Ableittung
-    // ABleitung nach x: 
+//first derivation dx
+//numerical
     FILE * x_derivates;
     x_derivates = fopen("x_der_first.txt", "w+");
 
@@ -104,6 +95,7 @@ fclose(testfile_v);
 
     fclose(x_derivates);
 
+//analytical
     FILE * x_derivates_ana;
     x_derivates_ana = fopen("x_der_ana_first.txt", "w+");
 
@@ -116,8 +108,9 @@ fclose(testfile_v);
 
 fclose(x_derivates_ana);
 
-// Zweite ABleitung
-FILE * y_derivates;
+// first derivation dy
+//numerical
+    FILE * y_derivates;
     y_derivates = fopen("y_der_first.txt", "w+");
 
     for(int j = 0; j < JMAX-1; j++){
@@ -130,6 +123,7 @@ FILE * y_derivates;
 
     fclose(y_derivates);
 
+//analytical
     FILE * y_derivates_ana;
     y_derivates_ana = fopen("y_der_ana_first.txt", "w+");
 
@@ -142,8 +136,8 @@ FILE * y_derivates;
 
 fclose(y_derivates_ana);
 
-//zweite ABleitungen
-
+//second derivation dx
+// numerical
 FILE * x_sec_der;
 x_sec_der = fopen("x_sec_der.txt","w+");
 
@@ -156,6 +150,7 @@ for(int j=0;j<JMAX;j++){
 
 fclose(x_sec_der);
 
+//analytical
 FILE * x_sec_der_ana;
 x_sec_der_ana  = fopen("x_sec_der_ana.txt","w+");
 
@@ -169,7 +164,8 @@ for(int j=0;j<JMAX;j++){
 fclose(x_sec_der_ana);
 
 
-
+//second derivation dy
+//numerical
 FILE * y_sec_der;
 y_sec_der = fopen("y_sec_der.txt","w+");
 
@@ -179,9 +175,9 @@ for(int j=0;j<JMAX-2;j++){
     }
     fprintf(y_sec_der,"\n");
 }
-
 fclose(y_sec_der);
 
+//analytical
 FILE * y_sec_der_ana;
 y_sec_der_ana  = fopen("y_sec_der_ana.txt","w+");
 
@@ -191,21 +187,17 @@ for(int j=0;j<JMAX;j++){
         }
         fprintf(y_sec_der_ana,"\n");
     }
-
 fclose(y_sec_der_ana);
 
-// nicht lineare Ableitungen
+// non linear derivates and gamma
 
-//u^2
-
-// gamma berechnen
+// calculate gamma an choose a dt
 float gamma, dt;
-dt = 0.01;
+dt = 0.01; // don't choose dt to big
 gamma = gamma_v(u_values,dt,dx,IMAX,JMAX);
 
-printf("%.6f", gamma);
-
-
+//derivate u^2 /dx
+//numerical
 FILE * x_nl2_der;
 x_nl2_der = fopen("x_nl2_der.txt","w+");
 
@@ -217,6 +209,7 @@ for(int j=0;j<JMAX;j++){
 }
 fclose(x_nl2_der);
 
+//analytical
 FILE * x_nl2_der_ana;
 x_nl2_der_ana  = fopen("x_nl2_der_ana.txt","w+");
 
@@ -226,12 +219,10 @@ for(int j=0;j<JMAX;j++){
         }
         fprintf(x_nl2_der_ana,"\n");
     }
-
 fclose(x_nl2_der_ana); 
 
-
-
-
+// derivate u^2/dy
+//numerical
 FILE * y_nl2_der;
 y_nl2_der = fopen("y_nl2_der.txt","w+");
 
@@ -241,8 +232,10 @@ for(int j=0;j<JMAX-2;j++){
     }
     fprintf(y_nl2_der,"\n");
 }
+
 fclose(y_nl2_der);
 
+//analytical
 FILE * y_nl2_der_ana;
 y_nl2_der_ana  = fopen("y_nl2_der_ana.txt","w+");
 
@@ -252,11 +245,9 @@ for(int j=0;j<JMAX;j++){
         }
         fprintf(y_nl2_der_ana,"\n");
     }
-
 fclose(y_nl2_der_ana); 
 
-// u*v
-
+// calculate u*v 
 FILE * uv;
 uv  = fopen("uv_test.txt","w+");
 
@@ -266,25 +257,11 @@ for(int j=0;j<JMAX;j++){
         }
         fprintf(uv,"\n");
     }
-
 fclose(uv); 
 
-//Analytische Ableitung nach x
+// derivate u*v /dx
 
-FILE * uv_x;
-uv_x  = fopen("x_nluv_der_ana.txt","w+");
-
-for(int j=0;j<JMAX;j++){
-        for(int i=0;i<IMAX;i++){
-           fprintf(uv_x, "%.6f\t", testfunc_uv_der_x(b[i].x, b[j].y, testfunc_u, testfunc_v)) ;
-        }
-        fprintf(uv_x,"\n");
-    }
-
-fclose(uv_x); 
-
-// Ableitung nach x
-
+//numerical
 FILE * x_nluv_der;
 x_nluv_der = fopen("x_nluv_der.txt","w+");
 
@@ -296,20 +273,22 @@ for(int j=0;j<JMAX-1;j++){
 }
 fclose(x_nluv_der);
 
-
-
-FILE * uv_y;
-uv_y  = fopen("y_nluv_der_ana.txt","w+");
+// analytical
+FILE * uv_x;
+uv_x  = fopen("x_nluv_der_ana.txt","w+");
 
 for(int j=0;j<JMAX;j++){
         for(int i=0;i<IMAX;i++){
-           fprintf(uv_y, "%.6f\t", testfunc_uv_der_y(b[i].x, b[j].y, testfunc_u, testfunc_v)) ;
+           fprintf(uv_x, "%.6f\t", testfunc_uv_der_x(b[i].x, b[j].y, testfunc_u, testfunc_v)) ;
         }
-        fprintf(uv_y,"\n");
+        fprintf(uv_x,"\n");
     }
+fclose(uv_x);
 
-fclose(uv_y); 
 
+// derivate u*v/dy
+
+// numerical
 FILE * y_nluv_der;
 y_nluv_der = fopen("y_nluv_der.txt","w+");
 
@@ -321,10 +300,17 @@ for(int j=0;j<JMAX-2;j++){
 }
 fclose(y_nluv_der);
 
+// analytical
+FILE * uv_y;
+uv_y  = fopen("y_nluv_der_ana.txt","w+");
 
-
-
-
+for(int j=0;j<JMAX;j++){
+        for(int i=0;i<IMAX;i++){
+           fprintf(uv_y, "%.6f\t", testfunc_uv_der_y(b[i].x, b[j].y, testfunc_u, testfunc_v)) ;
+        }
+        fprintf(uv_y,"\n");
+    }
+fclose(uv_y); 
 }
 
 

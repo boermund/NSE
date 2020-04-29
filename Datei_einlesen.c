@@ -2,17 +2,15 @@
 #include <math.h>
 #include <stdlib.h>
 
+/* testfile to write a txt file into a struct an caluculate the gamma value
+*/
 #define IMAX    2
 #define JMAX    6
-
-
-
-//Matrix: SPeicher reservieren
-//#define BUF 255
 
 typedef struct
 {
     float u;
+    float v;
 } cell;
 
 #include "allok.h"
@@ -21,28 +19,44 @@ typedef struct
 
 int main(void) {
 
-    FILE *myFile;
-    myFile = fopen("test.txt", "r");
+    FILE *myFile0;
+    myFile0 = fopen("test0.txt", "w+");
 
-    if (myFile == NULL){
-        printf("Error Reading File\n");
-        exit (0);
+    float k = 2.3;
+    for(int j = 0; j < JMAX; j++){
+        for( int i= 0; i< IMAX; i++){
+        fprintf(myFile0,"%.6f\n", (float)pow(i,pow(-1,k))/k);
+        printf("%.6f\n", (float)pow(i,pow(-1,k))/k);}
+        fprintf(myFile0, "\n");
     }
+
+    fclose(myFile0);
+
+    FILE *myFile1;
+    myFile1 = fopen("test1.txt", "w+");
+
+    for(int j = 0; j < JMAX; j++){
+        for( int i= 0; i< IMAX; i++){
+        fprintf(myFile0,"%.6f\n", (float)pow(i,pow(-1,k))/k);
+        printf("%.6f\n",  (float)pow(i,pow(-1,k))/k);}
+        fprintf(myFile1, "\n");
+    }
+
+    fclose(myFile1);
+
+    FILE *myFile;
+    myFile = fopen("test0.txt", "r");
+
+     FILE *myFile2;
+    myFile = fopen("test1.txt", "r");
 
     cell *a, *new;
     a = fieldalloc(IMAX,JMAX);
     
-    new = read_data(a, myFile, IMAX,JMAX); //Size of the field plus the edges
+    new = read_data(a, myFile, myFile2, IMAX,JMAX);
+
     fclose(myFile);
-
-   
-   //gibt das Strukt aus
-   for(int j=0;j<JMAX;j++){
-        for(int i=0;i<IMAX;i++){
-        printf("%.6f\t",new[i+IMAX*j].u);}
-    } 
-
-    printf("\n");
+    fclose(myFile2);
 
     float gamma;
 
