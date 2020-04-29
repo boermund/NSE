@@ -310,7 +310,7 @@ for(int j=0;j<JMAX;j++){
 fclose(uv_y); 
 
 FILE * y_nluv_der;
-y_nluv_der = fopen("C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/txt-Dateien/y_nluv_der.txt","w+");
+y_nluv_der = fopen("y_nluv_der.txt","w+");
 
 for(int j=0;j<JMAX-2;j++){
     for(int i = 0; i< IMAX-1; i++){
