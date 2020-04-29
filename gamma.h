@@ -15,10 +15,10 @@ float gamma_v(cell *field, float dt, float dx, int imax, int jmax){
         else if (fabs(field[imax*j + i].u) >= umax)
         {
             umax = fabs(field[imax*j + i].u);
-            printf("%.6f ja\n", umax);
+            //printf("%.6f ja\n", umax);
         }
          else{
-             printf("%.6f nein\n", umax);
+             //printf("%.6f nein\n", umax);
          }
 
          

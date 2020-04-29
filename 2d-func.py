@@ -7,8 +7,7 @@ import numpy as np
 
 
 #Erste Ableitungen
-fig = plt.figure()
-ax = fig.gca(projection='3d')
+
 
 A = np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/x_values.txt')
 B = np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/y_values.txt')
@@ -18,6 +17,9 @@ W =  np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktiku
 U = np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/y_der_first.txt')
 V =  np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/y_der_ana_first.txt')
 # print(np.shape(W)) Zeilen und Spaltenlänge
+'''
+fig = plt.figure()
+ax = fig.gca(projection='3d')
 
 W = W[:,0:-1] # schneidet die letzte spalte ab
 
@@ -124,5 +126,158 @@ surf = ax.plot_surface(X, Y, V, cmap=cm.viridis,
 
 plt.show()
 
+#quaddratische abeitung
+
+U = np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/x_nl2_der.txt')
+V =  np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/x_nl2_der_ana.txt')
+
+
+V = V[:,1:-1]
+print(np.shape(V))
+
+X = A[1:-1]
+Y = B
+
+print(X, "hier ", len(X))
+print(Y, "hier ", len(Y))
+
+X, Y = np.meshgrid(X, Y)
+
+print(np.shape(U))
+print(np.shape(V))
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+
+surf = ax.plot_surface(X, Y, U, cmap=cm.viridis,
+                       linewidth=0, antialiased=False)
+surf = ax.plot_surface(X, Y, V, cmap=cm.plasma,
+                       linewidth=0, antialiased=False)
+
+plt.show()
+
+
+
+U = np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/y_nl2_der.txt')
+V =  np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/y_nl2_der_ana.txt')
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+
+V = V[1:-1,:]
+print(np.shape(V))
+
+X = A
+Y = B[1:-1]
+X, Y = np.meshgrid(X, Y)
+
+print(len(X))
+print(len(Y))
+
+print(np.shape(U))
+print(np.shape(V))
+
+surf = ax.plot_surface(X, Y, U, cmap=cm.viridis,
+                      linewidth=0, antialiased=False)
+surf = ax.plot_surface(X, Y, V, cmap=cm.viridis,
+                       linewidth=0, antialiased=False)
+
+plt.show()
+
+
+# testfunction v
+U = np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/testfunc_v.txt')
+#V =  np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/x_nl2_der_ana.txt')
+
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+X = A
+Y = B
+X, Y = np.meshgrid(X, Y)
+surf = ax.plot_surface(X, Y, U, cmap=cm.viridis,
+                       linewidth=0, antialiased=False)
+#surf = ax.plot_surface(X, Y, V, cmap=cm.plasma,
+ #                      linewidth=0, antialiased=False)
+
+plt.show()
+
+'''
+
+'''
+# testfunction uv
+U = np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/uv_test.txt')
+#V =  np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/x_nl2_der_ana.txt')
+
+
+fig = plt.figure(1)
+ax = fig.gca(projection='3d')
+X = A
+Y = B
+X, Y = np.meshgrid(X, Y)
+surf = ax.plot_surface(X, Y, U, cmap=cm.viridis,
+                       linewidth=0, antialiased=False)
+#surf = ax.plot_surface(X, Y, V, cmap=cm.plasma,
+ #                      linewidth=0, antialiased=False)
+
+plt.show()
+
+# testfunction uv_der_x_ana
+U = np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/x_nluv_der.txt')
+V =  np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/x_nluv_der_ana.txt')
+
+
+fig = plt.figure(2)
+ax = fig.gca(projection='3d')
+X = A[1:-1]
+Y = B[1:len(B)]
+
+print(len(X))
+print(len(Y))
+
+print(np.shape(U))
+print(np.shape(V))
+
+V = V[0:-1,1:-1]
+print(np.shape(V))
+
+
+X, Y = np.meshgrid(X, Y)
+surf = ax.plot_surface(X, Y, U, cmap=cm.viridis,
+                       linewidth=0, antialiased=False)
+surf = ax.plot_surface(X, Y, V, cmap=cm.plasma,
+                       linewidth=0, antialiased=False)
+
+plt.show()
+
+'''
+
+# testfunction uv_der_x_ana
+U = np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/y_nluv_der.txt')
+V =  np.loadtxt('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/Pragrammteile geschrieben/y_nluv_der_ana.txt')
+
+
+fig = plt.figure(3)
+ax = fig.gca(projection='3d')
+X = A[1:len(B)]
+Y = B[1:-1]
+
+print(len(X))
+print(len(Y))
+
+print(np.shape(U))
+print(np.shape(V))
+
+V = V[1:-1,0:len(B)-1]
+print(np.shape(V))
+
+
+X, Y = np.meshgrid(X, Y)
+surf = ax.plot_surface(X, Y, U, cmap=cm.viridis,
+                       linewidth=0, antialiased=False)
+surf = ax.plot_surface(X, Y, V, cmap=cm.plasma,
+                       linewidth=0, antialiased=False)
+
+plt.show()
 
 

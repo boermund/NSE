@@ -79,10 +79,26 @@ float test_sec_der_y(float x, float y){
     return cos(x)*(-sin(y));
 }
 
-float test_nl2_der_x(floatx, float y){
-    return 2cos(x)*(-sin(x))*pow(sin(y),2);
+float test_nl2_der_x(float x, float y){
+    return -2.0*cos(x)*(sin(x))*pow(sin(y),2.0);
 }
+
+float test_nl2_der_y(float x, float y){
+    return 2.0*cos(y)*(sin(y))*pow(cos(x),2.0);
+    }
 
 float testfunc_v(float x, float y){
     return pow(x,2)+pow(y,2);
+}
+
+float testfunc_uv(float x, float y, float (*u)(float,float), float (*v)(float,float)){
+    return (*u)(x,y) * (*v)(x,y);
+}
+
+float testfunc_uv_der_x(float x, float y, float (*u)(float,float), float (*v)(float,float)){
+    return -sin(x)*sin(y)*(*v)(x,y)+(*u)(x,y)*2*x;
+}
+
+float testfunc_uv_der_y(float x, float y, float (*u)(float,float), float (*v)(float,float)){
+    return cos(x)*cos(y)*(*v)(x,y)+(*u)(x,y)*2*y;
 }
