@@ -22,10 +22,11 @@ int main(void) {
     FILE *myFile0;
     myFile0 = fopen("test0.txt", "w+");
 
-    float g = 2.3;
+    float k = 2.3;
     for(int j = 0; j < JMAX; j++){
         for( int i= 0; i< IMAX; i++){
-        fprintf(myFile0,"%f\n", ((float)rand()/(float)(RAND_MAX)) * g);}
+        fprintf(myFile0,"%.6f\n", (float)pow(i,pow(-1,k))/k);
+        printf("%.6f\n", (float)pow(i,pow(-1,k))/k);}
         fprintf(myFile0, "\n");
     }
 
@@ -34,10 +35,10 @@ int main(void) {
     FILE *myFile1;
     myFile1 = fopen("test1.txt", "w+");
 
-    float g = 2.0;
     for(int j = 0; j < JMAX; j++){
         for( int i= 0; i< IMAX; i++){
-        fprintf(myFile1,"%f\n", ((float)rand()/(float)(RAND_MAX)) * g);}
+        fprintf(myFile0,"%.6f\n", (float)pow(i,pow(-1,k))/k);
+        printf("%.6f\n",  (float)pow(i,pow(-1,k))/k);}
         fprintf(myFile1, "\n");
     }
 
@@ -52,17 +53,10 @@ int main(void) {
     cell *a, *new;
     a = fieldalloc(IMAX,JMAX);
     
-    new = read_data(a, myFile, unimportant file, IMAX,JMAX); //Size of the field plus the edges
+    new = read_data(a, myFile, myFile2, IMAX,JMAX);
+
     fclose(myFile);
-
-   
-   //gibt das Strukt aus
-   for(int j=0;j<JMAX;j++){
-        for(int i=0;i<IMAX;i++){
-        printf("%.6f\t",new[i+IMAX*j].u);}
-    } 
-
-    printf("\n");
+    fclose(myFile2);
 
     float gamma;
 
