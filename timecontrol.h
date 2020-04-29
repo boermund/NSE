@@ -7,9 +7,9 @@ cell max_field(cell *field,int imax, int jmax){
         {
         if(field[i].u   <   max.u)
             max.u   =   field[i].u;
-        if(field[i].v<max.v)
+        if(field[i].v   <   max.v)
             max.v   =   field[i].v;
-        if(field[i].p<max.p)
+        if(field[i].p   <   max.p)
             max.p   =   field[i].p;
         }
     if (max.u==0)

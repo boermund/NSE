@@ -17,7 +17,8 @@
 #define STARTT  0  
 #define STOPT   10
 #define PI      3.14
-
+#define GY      0
+#define GX      0
 //structure for filling the array
 typedef struct
 {
@@ -26,19 +27,39 @@ typedef struct
     float v;
 } cell;
 
+typedef struct
+{
+    float fvalue;
+    float gvalue;
+} f_and_g;
 
+typedef struct
+{
+    f_and_g *fg;
+    cell    *field;
+} new_values;
+
+typedef struct
+{
+    cell *test;
+} testtype;
+
+#include "derivates.h"
 #include "allok.h"
 #include "output.h"
 #include "timecontrol.h"
 #include "ghostcell.h"
 #include "outputtest.h"
+#include "newspeed.h"
 
 //main
 void main(){
     cell *old;
-
+    cell *new;
+    new_values temp;
+    float gamma = 0;
     old = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
-
+    // Tom schreibt noch Gamma Funktion
     float dx,dy,timestep;
     dx = A/IMAX;
     dy= B/JMAX;
@@ -47,6 +68,8 @@ void main(){
     /*printf("%f",timestep);*/
     old=outputtest(old,IMAX+2,JMAX+2);
     old=cavity(old,IMAX+2,JMAX+2);
+    //new=newspeed(old,IMAX+2,JMAX+2,dx,dy)
+    temp = newspeed(old, IMAX+2, JMAX+2, dx ,dy, timestep, gamma)
     output(old,IMAX+2,JMAX+2);
     printf("%.2f", old->v);
 }
