@@ -20,7 +20,7 @@ typedef struct
 int main(void) {
 
     FILE *myFile0;
-    myFile0 = fopen("test.txt", "w+");
+    myFile0 = fopen("test0.txt", "w+");
 
     float g = 2.3;
     for(int j = 0; j < JMAX; j++){
@@ -31,18 +31,28 @@ int main(void) {
 
     fclose(myFile0);
 
-    FILE *myFile;
-    myFile = fopen("test.txt", "r");
+    FILE *myFile1;
+    myFile1 = fopen("test1.txt", "w+");
 
-    if (myFile == NULL){
-        printf("Error Reading File\n");
-        exit (0);
+    float g = 2.0;
+    for(int j = 0; j < JMAX; j++){
+        for( int i= 0; i< IMAX; i++){
+        fprintf(myFile1,"%f\n", ((float)rand()/(float)(RAND_MAX)) * g);}
+        fprintf(myFile1, "\n");
     }
+
+    fclose(myFile1);
+
+    FILE *myFile;
+    myFile = fopen("test0.txt", "r");
+
+     FILE *myFile2;
+    myFile = fopen("test1.txt", "r");
 
     cell *a, *new;
     a = fieldalloc(IMAX,JMAX);
     
-    new = read_data(a, myFile, IMAX,JMAX); //Size of the field plus the edges
+    new = read_data(a, myFile, unimportant file, IMAX,JMAX); //Size of the field plus the edges
     fclose(myFile);
 
    
