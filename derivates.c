@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /* 
-program to test the derivates 
+program to test the derivates n
 */
 
 #define IMAX    50
@@ -75,8 +75,7 @@ void main(){
 
     fclose(testfile_u);
     fclose(testfile_v);
-    printf("Wert %.6f",u_values[3].v);
-
+    
 // derivates
 // calculate the analytical and the numerical and put them in seperate files to plot an compare them. 
 

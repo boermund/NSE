@@ -10,6 +10,7 @@ xandy *put_xy_in_file(int imax, int jmax, float dx, float dy){
 
 
     float xwert = 0, ywert = 0;
+
 // make a struct
     xandy *c;
     c = calloc(imax + jmax,sizeof(xandy));
@@ -35,6 +36,8 @@ xandy *put_xy_in_file(int imax, int jmax, float dx, float dy){
 
     int fclose (FILE *xv);
     int fclose (FILE *yv);
+
+    free(c);
 
     return c; 
 
