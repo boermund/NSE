@@ -26,26 +26,32 @@ float Gfunction(cell* field,int z,int imax, int jmax, float dt, float dx, float 
 }
 
 new_values newspeed(cell*old,int imax,int jmax,float dx,float dy,float dt, float gamma){
-    cell *new;
+    cell *newuv;
     f_and_g *newfg; //In deiner Funktion wieder frei machen
-    new = calloc(imax*jmax,sizeof(cell));
-    newfg = calloc((imax-2)-(jmax-2),sizeof(f_and_g)); //Zwei kleiner weil die Randwertew fehlen
-    for(int i = 0; i < imax * jmax ;i++)
+    newuv = calloc(imax*jmax,sizeof(cell));
+    newfg = calloc((imax)*(jmax),sizeof(f_and_g)); //Zwei kleiner weil die Randwertew fehlen
+    
+for(int i = 0; i < imax * jmax ;i++)
     {
+        if((i>imax+1 && (i<imax*(jmax-1)))&&((i%imax!=0)&&(i*imax!=imax-1))){
         newfg[i].fvalue = Ffunction(old,i,imax,jmax,dt,dx,dy,gamma);
         newfg[i].gvalue = Gfunction(old,i,imax,jmax,dt,dx,dy,gamma); 
         
-        new[i].u = newfg[i].fvalue -
+        newuv[i].u = newfg[i].fvalue -
         dt *
         first_d(old[i+1].p,old[i].p,dx);
 
-        new[i].v = newfg[i].gvalue -
+        newuv[i].v = newfg[i].gvalue -
         dt * 
         first_d(old[i+1].p,old[i].p,dy);
+        }
+
+        //printf("%d:\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t\n",i,newfg[i].fvalue,newfg[i].gvalue,newuv[i].u,newuv[i].v,newuv[i].p);
+        //output(new,IMAX+2,JMAX+2);
     }
     new_values passback;
-    passback.field = new;
-    free(new);
+    passback.field = newuv;
+    free(newuv);
     passback.fg = newfg;
     free(newfg);
     return passback;

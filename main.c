@@ -8,10 +8,10 @@
 #define RE      100
 #define A       5.0
 #define B       5.0
-#define IMAX    33
-#define JMAX    33 
-#define UMAX    100
-#define VMAX    100
+#define IMAX    10
+#define JMAX    10 
+#define UMAX    10
+#define VMAX    10
 #define TAU     0.5 //Factor for adaptive step control
 #define OMEGA   0.5 //Relaxation Factor
 #define STARTT  0  
@@ -50,11 +50,10 @@ typedef struct
 //main
 void main(){
     cell *old;
-    cell *new;
+    cell *newfield;
     new_values temp;
-    f_and_g passby;
+    f_and_g *passby;
     float gamma = 0;
-    old = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     // Tom schreibt noch Gamma Funktion
     float dx,dy,timestep;
     dx = A/IMAX;
@@ -62,14 +61,52 @@ void main(){
     old=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     timestep=timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
     /*printf("%f",timestep);*/
-    old=outputtest(old,IMAX+2,JMAX+2);
-    old=cavity(old,IMAX+2,JMAX+2);
-    //new=newspeed(old,IMAX+2,JMAX+2,dx,dy)
-    temp = newspeed(old, IMAX+2, JMAX+2, dx ,dy, timestep, gamma)
-    passby = temp.fg;
-     
-    output(old,IMAX+2,JMAX+2);
-    printf("%.2f", old->v);
+    //old=outputtest(old,IMAX+2,JMAX+2);
+
+    //old=cavity(old,IMAX+2,JMAX+2);
+    
+    temp = newspeed(old, IMAX+2, JMAX+2, dx ,dy, timestep, gamma);
+    passby  = temp.fg;
+    newfield     = temp.field;
+
+    // Druck in den Randzellen anpassen
+    //output(newfield,IMAX+2,JMAX+2);
+    //printf("%.2f", old->v);
+    //free(newfield);
+    //free(old);
+    //free(passby);
+    printf("print1\n\n\n");
+    for(int z = 0; z < (IMAX+2)*(JMAX+2);z++)
+        printf("%d:\t%.2f\t%.2f\t%.2f\n",z,newfield[z].u,newfield[z].u,newfield[z].p);
+    /*
+    int imax = IMAX+2;
+    int jmax = JMAX+2;
+    FILE * vspeed;
+    vspeed = fopen ("vspeed.csv","w");
+    FILE * uspeed;
+    uspeed = fopen ("uspeed.csv","w");
+    FILE * pressure;
+    pressure = fopen ("pressure.csv","w");
+    */
+    printf("print2\n\n\n");
+    for(int z = 0; z < (IMAX+2)*(JMAX+2);z++)
+        printf("%d:\t%.2f\t%.2f\t%.2f\n",z,newfield[z].u,newfield[z].u,newfield[z].p);
+    /*
+    for(int j=0;j<jmax;j++){
+        for(int i=0;i<imax;i++){
+            fprintf(vspeed,"%f,",newfield[i+imax*j].v);
+            fprintf(uspeed,"%f,",newfield[i+imax*j].u);
+            fprintf(pressure,"%f,",newfield[i+imax*j].p);
+        
+        }
+        fprintf(vspeed,"\n");
+        fprintf(uspeed,"\n");
+        fprintf(pressure,"\n");
+    }
+    fclose(vspeed);
+    fclose(uspeed);
+    fclose(pressure);
+    */
 }
 
 
