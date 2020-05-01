@@ -41,7 +41,7 @@ for(int i = 0; i < imax * jmax ;i++)
         dt *
         first_d(old[i+1].p,old[i].p,dx);
 
-        newuv[i].v = newfg[i].gvalue +
+        newuv[i].v = newfg[i].gvalue -
         dt * 
         first_d(old[i+imax].p,old[i].p,dy);
         }
