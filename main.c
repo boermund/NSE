@@ -39,11 +39,6 @@ typedef struct
     cell    *field;
 } new_values;
 
-typedef struct
-{
-    cell *test;
-} testtype;
-
 #include "derivates.h"
 #include "allok.h"
 #include "output.h"
@@ -57,6 +52,7 @@ void main(){
     cell *old;
     cell *new;
     new_values temp;
+    f_and_g passby;
     float gamma = 0;
     old = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     // Tom schreibt noch Gamma Funktion
@@ -70,6 +66,8 @@ void main(){
     old=cavity(old,IMAX+2,JMAX+2);
     //new=newspeed(old,IMAX+2,JMAX+2,dx,dy)
     temp = newspeed(old, IMAX+2, JMAX+2, dx ,dy, timestep, gamma)
+    passby = temp.fg;
+     
     output(old,IMAX+2,JMAX+2);
     printf("%.2f", old->v);
 }
