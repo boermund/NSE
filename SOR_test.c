@@ -11,7 +11,7 @@
 typedef struct 
 {
     float r;  
-} cell;
+} res;
 
 typedef struct 
 {
@@ -30,7 +30,7 @@ typedef struct
 } cell_fg;
 
 
-#include "allok.h"
+//#include "allok.h"
 #include "SOR.h"
 
 void main(){
@@ -41,8 +41,8 @@ jmax2 = JMAX + 2;
 // test the abs_residuum_function
 
 //fill a field with numbers
-cell *a;
-a = fieldalloc(IMAX,JMAX); 
+res *a;
+a = calloc((IMAX)*(JMAX),sizeof(res));
 
 
 for(int j = 0; j < JMAX; j++){
@@ -52,7 +52,7 @@ for(int j = 0; j < JMAX; j++){
     }
 }
 
-free(a);
+//free(a);
 
 //test the function
 float residuum;
@@ -100,10 +100,6 @@ for(int j = 0; j < JMAX + 2; j++){
 }
 
 printf("\n\n");
-
-
-
-
 
 
 
@@ -166,7 +162,7 @@ for(int j = 0; j < JMAX+2; j++){
 }
 
 printf("\n");
-
+/*
 pres = pres_it(pres,  RHS, dx,  dy,  omega, p_it, IMAX +2, JMAX + 2);
 
 printf("Druckwerte2:\n");
@@ -178,6 +174,34 @@ for(int j = 0; j < JMAX+2; j++){
 }
 
 printf("\n");
+*/
+
+// test function for struct residuum
+
+res * res_str;
+res_str = calloc((IMAX)*(JMAX),sizeof(res));
+
+res_str = res_struct(res_str, RHS, pres, res_func, dx,dy,IMAX + 2, JMAX + 2 ); 
+printf("\n\n");
+printf("Res_struct:\n");
+
+for(int j = 0; j < JMAX; j++){
+    for(int i = 0; i < IMAX; i++){
+       printf("%.6f\t", res_str[IMAX*j + i].r);
+    }
+    printf("\n");
+}
+
+printf("\n");
+
+// abs res
+
+printf("abs: %.6f\n", abs_res(res_str, IMAX, JMAX));
+
+printf("abs: %.6f\n", abs_pres(pres, IMAX+2, JMAX+2));
+
+
+
 
 
 }

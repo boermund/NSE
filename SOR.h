@@ -9,11 +9,9 @@
 float p_it(float xpi, float x, float xmi, float xpj, float xmimj, float RHS, float dx, float dy, float omega){
 
 printf("xpi: %.6f, x:  %.6f, xmi: %.6f,xpj: %.6f,xmimj %.6f, RHS %.6f, dx; %.6f, dy: %.6f, omega: %.6f\n", xpi,  x, xmi,  xpj, xmimj, RHS,  dx, dy,  omega);
-float p;
-p = (1 - omega)*x + omega * (1/ (2*( 1/pow(dx,2) + 1/pow(dy,2)) ) ) * 
+
+return (1 - omega)*x + omega * (1/ (2*( 1/pow(dx,2) + 1/pow(dy,2)) ) ) * 
         ( (xpi + xmi)/pow(dx,2)  +  (xpj + xmimj)/pow(dy,2)  -  RHS);
-printf("Druck: %.6f\n",p);
-return p;
 }
 
 // p_it+1 struct
@@ -69,12 +67,6 @@ for(int j = 0; j < jmax2; j++ ){
 
 
     return pres;}
-
-
-
-
-
-
 
 // RHS
 //returns a struct
@@ -137,12 +129,28 @@ rhs_struct *rhs_func( rhs_struct * RHS, cell_fg * fg, float dx, float dy, float 
 }
 
 // residuum
+
+//function
+
+float res_func(float ppi, float p, float pmi, float ppj, float pmj, float dx, float dy,  float rhs ){
+    return (ppi - 2* p + pmi)/pow(dx,2) + (ppj - 2* p + pmj)/pow(dy,2) - rhs;
+}
+
 // returns a struct
 
+res *res_struct(res * res_str, rhs_struct * RHS, presit * pres, float (*res_func)(float,float, float, float,float, float, float,float), float dx, float dy, int imax2, int jmax2){
+
+for(int j = 1; j < jmax2-1; j++){
+    for(int i = 1; i < imax2-1; i++){
+        res_str[(j-1)*(imax2-2) + (i-1)].r = (*res_func)(pres[j*imax2 + i + 1].p, pres[j*imax2 + i ].p, pres[j*imax2 + i -1].p, pres[(j+1)*imax2 + i].p, pres[(j-1)*imax2 + i].p, dx, dy, RHS[imax2 * j + i].rhs);
+    }
+    }
+return res_str;
+}
 
 // abs(residuum) as L_2 norm
 // returns a float
-float abs_res(cell * resi, int imax, int jmax){
+float abs_res(res * resi, int imax, int jmax){
 
     float residuum = 0;
 
@@ -155,10 +163,45 @@ float abs_res(cell * resi, int imax, int jmax){
     residuum = sqrt(residuum / (imax * jmax));
 
     return residuum; 
+
+// abs(pres_it = 0) as L_2 norm
 }
-// ghost cell
-// fill the fist variables of the struct
+
+float abs_pres(presit * pres, int imax2, int jmax2){
+
+    float abs_pres = 0;
+
+    for(int j = 1; j < jmax2-1; j++){
+        for(int i = 1; i < imax2-1; i++){
+        abs_pres += pow(pres[imax2*j+i].p,2);
+        printf("%.6f\n",pres[imax2*j+i].p);
+        }
+    }
+
+    abs_pres = sqrt(abs_pres / ((imax2-2) * (jmax2-2)));
+
+    return abs_pres; 
+}
+
+
+// put everything for one it-step togehter:
+
+struct * new_p(){
+
+    // get p_it from the big struct and calculate abs(p_it)
+        // hier muss kein abs gewählt werden, das epsilon wahrscheinlich kleiner 1 gewählt wird 
+        // ansonsten hier auch noch Residuum
+
+    // while loop
+            //p_it + 1
+            // residuum it + 1 and abs(residuum)
+            // if Bedingung bis abbruch
+    
+    // p_werte wieder in das struct einordnen
+    // return des dreiwertigen structs
+}
 
 
 
-//Moren: als nächstes Das P_it zum laufen bringen
+
+
