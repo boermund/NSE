@@ -9,7 +9,7 @@
 #define A       5.0
 #define B       5.0
 #define IMAX    10
-#define JMAX    10 
+#define JMAX    100 
 #define UMAX    10
 #define VMAX    10
 #define TAU     0.5 //Factor for adaptive step control
@@ -46,6 +46,7 @@ typedef struct
 #include "ghostcell.h"
 #include "outputtest.h"
 #include "newspeed.h"
+#include "findgamma.h"
 
 //main
 void main(){
@@ -58,19 +59,25 @@ void main(){
     float dx,dy,timestep;
     dx = A/IMAX;
     dy= B/JMAX;
+    
     old=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
+    
     timestep=timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
-
-    old=speedtest(old,IMAX+2,JMAX+2);
+    
+    old=vandp_linear(old,IMAX+2,JMAX+2);
 
     /*printf("%f",timestep);*/
     //old=outputtest(old,IMAX+2,JMAX+2);
 
-    //old=cavity(old,IMAX+2,JMAX+2);
-    
+
     temp = newspeed(old, IMAX+2, JMAX+2, dx ,dy, timestep, gamma);
+    
     passby  = temp.fg;
     newfield     = temp.field;
+
+
+    newfield=cavity(newfield,IMAX+2,JMAX+2);
+    
 
     // Druck in den Randzellen anpassen
     output(newfield,IMAX+2,JMAX+2);

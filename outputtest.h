@@ -17,3 +17,12 @@ cell * speedtest(cell *a, int imax, int jmax){
     }
     return a;
 }
+
+cell * vandp_linear(cell *a, int imax, int jmax){
+    float increase = 0.02;
+    for (int i=0; i < imax*jmax; i++){
+        a[i].u = -(i%imax)*increase;
+        a[i].p = (imax-(i%imax))*increase*increase*100;
+    }
+    return a;
+}
