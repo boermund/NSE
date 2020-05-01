@@ -55,7 +55,6 @@ void main(){
     new_values temp;
     f_and_g *passby;
     float gamma = 0;
-    // Tom schreibt noch Gamma Funktion
     float dx,dy,timestep;
     dx = A/IMAX;
     dy= B/JMAX;
@@ -63,7 +62,7 @@ void main(){
     old=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     
     timestep=timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
-    
+    gamma = findgamma(old, IMAX+2, JMAX+2, timestep, dx, dy);
     old=vandp_linear(old,IMAX+2,JMAX+2);
 
     /*printf("%f",timestep);*/
