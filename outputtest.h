@@ -7,3 +7,13 @@ cell * outputtest(cell *a,int imax, int jmax){
         }
     return a;
 }
+
+cell * speedtest(cell *a, int imax, int jmax){
+    float start = 0.1;
+    float idef = (int)(imax/2)-0.5;
+    float jdef = (int)(jmax/2)-0.5;
+    for (int i=0; i < imax*jmax; i++){
+        a[i].p= start / sqrt((pow((i%imax-idef),2)+pow(jdef-((i-i%imax)/jmax),2))+2);
+    }
+    return a;
+}

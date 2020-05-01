@@ -41,19 +41,20 @@ for(int i = 0; i < imax * jmax ;i++)
         dt *
         first_d(old[i+1].p,old[i].p,dx);
 
-        newuv[i].v = newfg[i].gvalue -
+        newuv[i].v = newfg[i].gvalue +
         dt * 
-        first_d(old[i+1].p,old[i].p,dy);
+        first_d(old[i+imax].p,old[i].p,dy);
         }
+        newuv[i].p=old[i].p;
 
         //printf("%d:\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t\n",i,newfg[i].fvalue,newfg[i].gvalue,newuv[i].u,newuv[i].v,newuv[i].p);
         //output(new,IMAX+2,JMAX+2);
     }
     new_values passback;
     passback.field = newuv;
-    free(newuv);
+    //free(newuv);
     passback.fg = newfg;
-    free(newfg);
+    //free(newfg);
     return passback;
 }
 

@@ -39,8 +39,8 @@ pressure=np.reshape(pressure,([x,int(y/x)]))
 
 print(uspeed,vspeed,pressure)
 
-uspeed      = np.flipud(uspeed)
-vspeed      = np.flipud(vspeed)
+uspeed      = np.flipud(uspeed*0.1)
+vspeed      = np.flipud(vspeed*0.1)
 pressure    = np.flipud(pressure)
 
 print(uspeed,vspeed,pressure)

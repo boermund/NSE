@@ -60,6 +60,9 @@ void main(){
     dy= B/JMAX;
     old=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     timestep=timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
+
+    old=speedtest(old,IMAX+2,JMAX+2);
+
     /*printf("%f",timestep);*/
     //old=outputtest(old,IMAX+2,JMAX+2);
 
@@ -70,43 +73,12 @@ void main(){
     newfield     = temp.field;
 
     // Druck in den Randzellen anpassen
-    //output(newfield,IMAX+2,JMAX+2);
+    output(newfield,IMAX+2,JMAX+2);
     //printf("%.2f", old->v);
     //free(newfield);
     //free(old);
     //free(passby);
-    printf("print1\n\n\n");
-    for(int z = 0; z < (IMAX+2)*(JMAX+2);z++)
-        printf("%d:\t%.2f\t%.2f\t%.2f\n",z,newfield[z].u,newfield[z].u,newfield[z].p);
-    /*
-    int imax = IMAX+2;
-    int jmax = JMAX+2;
-    FILE * vspeed;
-    vspeed = fopen ("vspeed.csv","w");
-    FILE * uspeed;
-    uspeed = fopen ("uspeed.csv","w");
-    FILE * pressure;
-    pressure = fopen ("pressure.csv","w");
-    */
-    printf("print2\n\n\n");
-    for(int z = 0; z < (IMAX+2)*(JMAX+2);z++)
-        printf("%d:\t%.2f\t%.2f\t%.2f\n",z,newfield[z].u,newfield[z].u,newfield[z].p);
-    /*
-    for(int j=0;j<jmax;j++){
-        for(int i=0;i<imax;i++){
-            fprintf(vspeed,"%f,",newfield[i+imax*j].v);
-            fprintf(uspeed,"%f,",newfield[i+imax*j].u);
-            fprintf(pressure,"%f,",newfield[i+imax*j].p);
-        
-        }
-        fprintf(vspeed,"\n");
-        fprintf(uspeed,"\n");
-        fprintf(pressure,"\n");
-    }
-    fclose(vspeed);
-    fclose(uspeed);
-    fclose(pressure);
-    */
+    
 }
 
 
