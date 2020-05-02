@@ -17,7 +17,6 @@ return (1 - omega)*x + omega * (1/ (2*( 1/pow(dx,2) + 1/pow(dy,2)) ) ) *
 // p_it+1 struct
 // returns a struct with all p_it+1 values
 
-
 presit * pres_it(presit * pres, rhs_struct * RHS, float dx, float dy, float omega, float (*p_it)(float,float, float, float,float, float, float,float, float), int imax2, int jmax2){
 
 
@@ -174,7 +173,6 @@ float abs_pres(presit * pres, int imax2, int jmax2){
     for(int j = 1; j < jmax2-1; j++){
         for(int i = 1; i < imax2-1; i++){
         abs_pres += pow(pres[imax2*j+i].p,2);
-        printf("%.6f\n",pres[imax2*j+i].p);
         }
     }
 
@@ -186,20 +184,97 @@ float abs_pres(presit * pres, int imax2, int jmax2){
 
 // put everything for one it-step togehter:
 
-struct * new_p(){
+cell *new_p(cell * newp, rhs_struct *RHS, res * res_str,
+float (*abs_pres)(presit*, int,int),  float (*p_it)(float, float, float, float, float, float, float, float, float), 
+presit * (*pres_it)(presit *, rhs_struct *, float, float, float, float (*p_it)(float,float, float, float,float, float, float,float, float), int, int),
+float (*res_func)(float, float, float, float, float, float, float,  float),
+res * (*res_struct)(res * , rhs_struct *, presit *, float (*res_func)(float,float, float, float,float, float, float,float), float, float, int, int),
+float (*abs_res)(res *, int, int),
+float dx, float dy, float omega,  float epsilon, int imax2, int jmax2){
 
-    // get p_it from the big struct and calculate abs(p_it)
+    presit * pres; 
+    pres = calloc((imax2)*(jmax2),sizeof(presit)); 
+
+    // get p_it from the big struct
+    for(int j = 0; j < jmax2; j++){
+        for(int i = 0; i < imax2; i++){
+            pres[imax2*j+i].p = newp[imax2*j+i].p; 
+            printf(" %.6f\t", pres[imax2*j+i].p);
+        }
+        printf("\n");
+        }
+    
+    printf("\nRHS\n");
+    for(int j = 0; j < JMAX + 2; j++){
+    for(int i = 0; i < IMAX + 2; i++){
+        
+        printf(" %.6f\t",RHS[(IMAX+2)*j +i].rhs);
+    }
+    printf("\n");
+}
+
+printf("\n\n");
+
+//calculate abs(p_it)
+    float abs_pres0 = 0;
+    abs_pres0 = abs_pres(pres, imax2, jmax2);
+    printf("abspres0: %.6f", abs_pres0);
+
+// calculate the new pressure p_it + 1
+
+float absres  = 1000;
+
+while(absres >= epsilon * abs_pres0){
+    pres = pres_it(pres,  RHS, dx,  dy,  omega, p_it, imax2, jmax2);
+
+    for(int j = 0; j < jmax2; j++){
+        for(int i = 0; i < imax2; i++){ 
+            printf(" %.6f\t", pres[imax2*j+i].p);
+        }
+        printf("\n");
+        }
+    
+// calculate the residuum
+    res_str = res_struct(res_str, RHS, pres, res_func, dx, dy, imax2, jmax2);
+    for(int j = 0; j < jmax2-2; j++){
+        for(int i = 0; i < imax2-2; i++){ 
+            printf(" %.6f\t", res_str[(imax2-2)*j+i].r);
+        }
+        printf("\n");
+        }
+
+// abs of residuum (evtl noch in die struct funktion verpacken bzw. die struchtfunktion in die)
+
+        absres = abs_res(res_str, imax2-2, jmax2-2);
+        printf(" absres: %.6f", absres);
+
+}
+
+for(int j = 0; j < jmax2; j++){
+        for(int i = 0; i < imax2; i++){
+           newp[imax2*j+i].p =pres[imax2*j+i].p; 
+            printf(" %.6f\t", newp[imax2*j+i].p);
+        }
+        printf("\n");
+        }
+
+
+
+// überprüfen ob while schleife funktionier 
         // hier muss kein abs gewählt werden, das epsilon wahrscheinlich kleiner 1 gewählt wird 
         // ansonsten hier auch noch Residuum
-
-    // while loop
-            //p_it + 1
-            // residuum it + 1 and abs(residuum)
-            // if Bedingung bis abbruch
     
     // p_werte wieder in das struct einordnen
     // return des dreiwertigen structs
+return newp;
 }
+
+// test elliptische DGL
+
+// statt rhs f und g einfach wieder p einsetzen und mal 2 und dann pij it + 1 ausrechnen lassen (Gleichung umstellen)
+// druckwerte mit analytischen werden des ergebnissees der gleichung vergleichen
+// startwert aber nicht bei null durchführen wenn möglichen, denn dann wird alles null
+// anfansvetor schaffen der nahe an den alten liegt !!!
 
 
 

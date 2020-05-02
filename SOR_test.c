@@ -29,6 +29,13 @@ typedef struct
     float g;  
 } cell_fg;
 
+typedef struct
+{
+    float p;
+    float u;
+    float v;
+} cell;
+
 
 //#include "allok.h"
 #include "SOR.h"
@@ -151,7 +158,7 @@ float omega = 0.8;
 
 pres = pres_it(pres,  RHS, dx,  dy,  omega, p_it, IMAX +2, JMAX + 2);
 
-printf("\n\n");
+/*printf("\n\n");
 printf("Druckwerte1:\n");
 
 for(int j = 0; j < JMAX+2; j++){
@@ -161,7 +168,7 @@ for(int j = 0; j < JMAX+2; j++){
     printf("\n");
 }
 
-printf("\n");
+printf("\n");*/
 /*
 pres = pres_it(pres,  RHS, dx,  dy,  omega, p_it, IMAX +2, JMAX + 2);
 
@@ -196,12 +203,30 @@ printf("\n");
 
 // abs res
 
-printf("abs: %.6f\n", abs_res(res_str, IMAX, JMAX));
+printf("abs res: %.6f\n", abs_res(res_str, IMAX, JMAX));
 
-printf("abs: %.6f\n", abs_pres(pres, IMAX+2, JMAX+2));
+printf("abs pres: %.6f\n", abs_pres(pres, IMAX+2, JMAX+2));
 
 
+// test function new_p, giving a new p field afther the SOR step
 
+cell * h; 
+
+h = calloc((IMAX+2)*(JMAX+2),sizeof(cell));
+
+res * res_st;
+res_st = calloc((IMAX)*(JMAX),sizeof(res));
+
+
+for(int j = 0; j < JMAX+2; j++){
+    for(int i = 0; i < IMAX+2; i++){
+      h[(IMAX+2)*j + i].p  = pres[(IMAX+2)*j + i].p;
+    }
+}
+
+float epsilon = 0.1;
+
+h = new_p(h, RHS, res_st, abs_pres, p_it, pres_it, res_func, res_struct, abs_res, dx, dy, omega, epsilon, IMAX + 2, JMAX + 2 );
 
 
 }
