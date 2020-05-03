@@ -39,6 +39,21 @@ typedef struct
     cell    *field;
 } new_values;
 
+typedef struct 
+{
+    float r;  
+} res;
+
+typedef struct 
+{
+    float p;  
+} presit;
+
+typedef struct 
+{
+    float rhs;  
+} rhs_struct;
+
 #include "derivates.h"
 #include "allok.h"
 #include "output.h"
