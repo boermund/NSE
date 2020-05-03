@@ -151,7 +151,7 @@ rhs_struct *rhs_func( rhs_struct * RHS, f_and_g * fg, float dx, float dy, float 
     }
     
 // fill the boundaries with the same values next to/ under/ upper the boundaries
-// I think here might be a error
+// I think here might be a error, otherwise I think I don't need that values 
     for(int i = 0; i < imax2; i++){
             RHS[i].rhs = RHS[imax2 + i].rhs;
             RHS[(jmax2-1)*imax2 + i].rhs = RHS[(jmax2-2)*imax2 + i].rhs;
@@ -224,6 +224,7 @@ float dx, float dy, float omega,  float epsilon, int imax2, int jmax2){
 
     // print the new pressure (it = 0)
     
+    /*
     printf("\nDruckwerte0-SOR:\n");
     for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){ 
@@ -231,10 +232,10 @@ float dx, float dy, float omega,  float epsilon, int imax2, int jmax2){
         }
         printf("\n");
         }
-    
+    */
 
     // look that I get the right RHS
-    
+    /*
         printf("\nRHS-SOR\n");
         for(int j = 0; j < JMAX + 2; j++){
         for(int i = 0; i < IMAX + 2; i++){
@@ -242,7 +243,7 @@ float dx, float dy, float omega,  float epsilon, int imax2, int jmax2){
         }
         printf("\n");
     }
-    
+    */
 
     //calculate abs(p_it)
     // as I understand I have only to calculate only the abs(presure) once: for p_(it = 0)
@@ -255,7 +256,13 @@ float dx, float dy, float omega,  float epsilon, int imax2, int jmax2){
     float absres  =  -INFINITY; 
 
     //whileloop
+    
+    int i = 0;
+    while( i<2){
+
     //while(absres > epsilon * abs_pres0){
+
+    
 
         // calculate the new pessure
         pres = pres_it(pres,  RHS, dx,  dy,  omega, p_it, imax2, jmax2);
@@ -289,6 +296,7 @@ float dx, float dy, float omega,  float epsilon, int imax2, int jmax2){
             }
             printf("\n");
             }
+
     */
 
 
@@ -296,8 +304,9 @@ float dx, float dy, float omega,  float epsilon, int imax2, int jmax2){
     absres = abs_res(res_str, imax2-2, jmax2-2);
     //printf(" \nabsres: %.6f\n", absres);
 
+    i+=1;
     // end of while loop
-    //}
+    }
 
     // put the new pressure values into the cell
     for(int j = 0; j < jmax2; j++){

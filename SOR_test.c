@@ -7,7 +7,7 @@
 
 #define IMAX    2
 #define JMAX    3
-#define OM      1
+#define OM      0.8
 #define EPS     0.95
 // in this cas it is important for me to define dx, dy by my self
 // normaly I would calculate them with the given size of the problem
@@ -154,14 +154,14 @@ for(int j = 0; j < JMAX+2; j++){
 
 
 // print them
-/*
+
 printf("\nDruckwerte0:\n");
 for(int j = 0; j < JMAX+2; j++){
     for(int i = 0; i < IMAX+2; i++){
         printf("%.6f\t",pres[(IMAX+2)*j + i].p);
     }
     printf("\n");
-}*/
+}
 
 
 // abs pressure
@@ -170,14 +170,31 @@ abspres = abs_pres(pres, imax2, jmax2);
 //printf("abs pres: %.6f\n", abspres);
 
 // test the pres_it function
+//if you want to test the SOR below and compare it with the results here you
+// have to comment the pres functions out and calculate the pressure with the SOR again
+
 // calculate pres twice
 
-pres = pres_it(pres,  RHS, DX,  DY,  OM, p_it, imax2, jmax2);
+//pres = pres_it(pres,  RHS, DX,  DY,  OM, p_it, imax2, jmax2);
 
 
 // print the new values
+
 /*
 printf("\nDruckwerte1:\n");
+for(int j = 0; j < JMAX+2; j++){
+    for(int i = 0; i < IMAX+2; i++){
+       printf("%.6f\t",pres[(IMAX+2)*j + i].p);
+    }
+    printf("\n");
+}*/
+
+
+
+//pres = pres_it(pres,  RHS, DX,  DY,  OM, p_it, imax2, jmax2);
+
+/*
+printf("\nDruckwerte2:\n");
 for(int j = 0; j < JMAX+2; j++){
     for(int i = 0; i < IMAX+2; i++){
        printf("%.6f\t",pres[(IMAX+2)*j + i].p);
@@ -187,17 +204,7 @@ for(int j = 0; j < JMAX+2; j++){
 */
 
 
-pres = pres_it(pres,  RHS, DX,  DY,  OM, p_it, imax2, jmax2);
-
-/*
-printf("\nDruckwerte2:\n");
-for(int j = 0; j < JMAX+2; j++){
-    for(int i = 0; i < IMAX+2; i++){
-       printf("%.6f\t",pres2[(IMAX+2)*j + i].p);
-    }
-    printf("\n");
-}
-*/
+// to test the boundary conditions there are print functions in the pres_it+1 in the SOR.h 
 
 
 //////////////////////////////////////////////////////////
@@ -263,6 +270,7 @@ printf("\nDruckwerte0- before SOR:\n");
 h = new_p(h, RHS, res_st, abs_pres, p_it, pres_it, res_func, res_struct, abs_res, DX, DY, OM, EPS, imax2, jmax2);
 
 //print the new_p
+
 printf("\nNew pressure/ solve of the PDG\n");
 for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
