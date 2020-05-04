@@ -88,10 +88,11 @@ void main(){
     
     passby  = temp.fg;
     newfield     = temp.field;
-
+    // FG Randwerte
 
     newfield=cavity(newfield,IMAX+2,JMAX+2);
     
+
 
     // Druck in den Randzellen anpassen
     output(newfield,IMAX+2,JMAX+2);

@@ -46,7 +46,9 @@ for(int i = 0; i < imax * jmax ;i++)
         first_d(old[i+imax].p,old[i].p,dy);
         }
         newuv[i].p=old[i].p;
-
+        else{
+            
+        }
         //printf("%d:\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t\n",i,newfg[i].fvalue,newfg[i].gvalue,newuv[i].u,newuv[i].v,newuv[i].p);
         //output(new,IMAX+2,JMAX+2);
     }
