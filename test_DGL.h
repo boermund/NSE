@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-
+// s
 // function wich solve the DGL
 float ellipt(float x, float y){
     return -1*exp(x+y);
