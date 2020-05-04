@@ -185,16 +185,26 @@ return res_str;
 
 // abs(residuum) as L_2 norm
 // returns a float
-float abs_res(res * resi, int imax, int jmax){
+float abs_res(res * resi, int imax2, int jmax2){
     
     float residuum = 0;
 
-    for(int j = 0; j < jmax; j++){
-        for(int i = 0; i < imax; i++){
-        residuum += pow(resi[imax*j+i].r,2);
+    /*printf("\nresiduum struct\n");
+    for(int j = 0; j < JMAX; j++){
+        for(int i = 0; i < IMAX; i++){
+            printf("%.6f\t",resi[(imax2-2)*j+i].r);
+    }
+    printf("\n");
+    }
+    */
+
+    for(int j = 0; j < jmax2-2; j++){
+        for(int i = 0; i < imax2-2; i++){
+        residuum += pow(resi[(imax2-2)*j+i].r,2.0);
+        //printf("res: %.6f und res.r: %.6f\n",residuum, resi[(imax2-2)*j+i].r);
         }
     }
-    residuum = sqrt(residuum / (imax * jmax));
+    residuum = sqrt(residuum / ((imax2-2) * (jmax2-2)));
     return residuum; 
 }
 
@@ -253,43 +263,50 @@ float dx, float dy, float omega,  float epsilon, int imax2, int jmax2){
     //printf("\nabspres0: %.6f", abs_pres0);
 
     //verry high ressidumm to start the while loop
-    float absres  =  -INFINITY; 
+    float absres  =  INFINITY; 
 
-    //whileloop
+    // chose the maximum of small or abs_pres0 to avoid that the loop never ends (abs_pres0 = 0)
+    float small = 0.001;
+
+    if(small>abs_pres0){
+        abs_pres0 = small;
+    }
+
+    // print the abs_pres0
+    //printf("abs_pres0: %.6f", abs_pres0);
     
-    int i = 0;
-    while( i<2){
+    //whileloop
 
-    //while(absres > epsilon * abs_pres0){
 
+    // to test wether the SOR works for the first two iterations
+    //int i = 0;
+    //while( i<10){
+
+    while(absres > epsilon * abs_pres0){
+        printf("abs_pres0: %.14f", abs_pres0);
     
 
         // calculate the new pessure
         pres = pres_it(pres,  RHS, dx,  dy,  omega, p_it, imax2, jmax2);
 
-    /*
-    // print it
-    printf("\npres:\n");
+
+        // print it
+        /*printf("\npres:\n");
         for(int j = 0; j < jmax2; j++){
             for(int i = 0; i < imax2; i++){ 
                 printf(" %.6f\t", pres[imax2*j+i].p);
             }
             printf("\n");
             }
-            printf("\n");
-    */
+        */
+    
 
     // calculate the residuum
         res_str = res_struct(res_str, RHS, pres, res_func, dx, dy, imax2, jmax2);
-        for(int j = 0; j < jmax2-2; j++){
-            for(int i = 0; i < imax2-2; i++){ 
-                //printf(" %.6f\t", res_str[(imax2-2)*j+i].r);
-            }
-            }
+
     /*
     // print the residuum
     printf("\nres:\n");
-        res_str = res_struct(res_str, RHS, pres, res_func, dx, dy, imax2, jmax2);
         for(int j = 0; j < jmax2-2; j++){
             for(int i = 0; i < imax2-2; i++){ 
                 printf(" %.6f\t", res_str[(imax2-2)*j+i].r);
@@ -301,10 +318,12 @@ float dx, float dy, float omega,  float epsilon, int imax2, int jmax2){
 
 
     // abs of residuum 
-    absres = abs_res(res_str, imax2-2, jmax2-2);
-    //printf(" \nabsres: %.6f\n", absres);
+    absres = abs_res(res_str, imax2, jmax2);
+    printf(" \nabsres: %.6f\n", absres);
 
-    i+=1;
+    //test the first two iterations
+    //i+=1;
+
     // end of while loop
     }
 

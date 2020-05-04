@@ -7,12 +7,12 @@
 #include <stdlib.h>
 
 //define the constants
-#define IMAX    2
-#define JMAX    3 //length of the lattice(begins at zero)
-#define XMAX    2 //length of the lattice(begins at zero)
+#define IMAX    400
+#define JMAX    400 //length of the lattice(begins at zero)
+#define XMAX    3//length of the lattice(begins at zero)
 #define YMAX    3
-#define OM      1
-#define EPS     0.95
+#define OM      1.2
+#define EPS     2
 
 /* 
 filling of the latice with IMAX = 2, JMAX = 3
@@ -97,6 +97,23 @@ for(int j =0; j < jmax2; j++){
     }
 */
 
+// put x and y values into a file
+FILE * xval;
+    xval = fopen("xval.txt", "w+");
+FILE * yval;
+    yval = fopen("yval.txt", "w+");
+
+
+    for(int i = 0; i < imax2; i++){
+        fprintf(xval, " %.6f\t", xy[i].x);
+        }
+    for(int j = 0; j < jmax2; j++){
+        fprintf(yval, " %.6f\t", xy[j].y);
+    }
+
+fclose(xval);
+fclose(yval);
+
 //define a struct for the values of testfunction/ solve of the PDF (-exp(x+y))
 ellip * testel;
 testel = calloc((IMAX+2)*(JMAX+2),sizeof(ellip));
@@ -107,11 +124,24 @@ testel = ellipt_struct(testel, xy, ellipt, imax2, jmax2);
 printf("values -exp(x+y)\n");
 for(int j =0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
-            printf("%.6f\t", el[j*imax2 + i].e);
+            printf("%.6f\t", testel[j*imax2 + i].e);
         }
         printf("\n");
     }
 */
+
+// put the analytical values into a file
+FILE * p_ana;
+    p_ana = fopen("p_ana.txt", "w+");
+
+    for(int j = 0; j < jmax2; j++){
+        for(int i = 0; i < imax2; i++){
+            fprintf(p_ana, " %.6f\t", testel[j*imax2 + i].e);
+        }
+        fprintf(p_ana, "\n");
+        }
+
+fclose(p_ana);
 
 //define the struct for the RHS: -2*exp(x+y) and write the values into it
 rhs_struct * RHS; 
@@ -140,20 +170,26 @@ for(int j =0; j < jmax2; j++){
 
 cell * h; 
 h = calloc((IMAX+2)*(JMAX+2),sizeof(cell));
+
 for(int j =0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
-            h[j*imax2 + i].p = testel[j*imax2 + i].e;
+            h[j*imax2 + i].p = testel[j*imax2 + i].e - 0.001;
         }
     }
 
-for(int j =1; j < jmax2-1; j++){
-        for(int i = 1; i < imax2-1; i++){
+
+// fill the start pressure with zeros
+/*
+for(int j =0; j < jmax2; j++){
+        for(int i = 0; i < imax2; i++){
             h[j*imax2 + i].p = 0;
         }
     }
+*/
 
+// print RHS
 /*
-printf("\nDruck\n");
+printf("\nRHS\n");
 for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
            
@@ -170,18 +206,26 @@ res_st = calloc((IMAX)*(JMAX),sizeof(res));
 // SOR: calculate the new pressure and put it in the cell
 h = new_p(h,RHS,res_st, abs_pres, p_it, pres_it, res_func, res_struct, abs_res, dx, dy, OM, EPS, imax2, jmax2);
 
-//print the new_p
+//print the new_p an put them in to a txt file
+FILE * newp;
+    newp = fopen("new_p.txt", "w+");
 //as I understand, it has to be -exp(x+y) with the values we already calculated
-/*printf("\nNew pressure/ solve of the PDG\n");
+
+printf("\nNew pressure/ solve of the PDG\n");
 for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
-            printf(" %.6f\t", h[imax2*j+i].p);
+          //  printf(" %.6f\t", h[imax2*j+i].p);
+            fprintf(newp, " %.6f\t", h[imax2*j+i].p);
         }
-        printf("\n");
-        }*/
+        //printf("\n");
+        fprintf(newp, "\n");
+        }
+
+fclose(newp);
 
 // problem if we observe the SOR: 
     // error of the residuum ist constant, pressure rises very fast and becomes to big
     // problem if we choose the first option of the pressure p_it=0: abs(p_it =0) = 0 and t the alorithm doesnt't end
     // try it with different values for epsilon and omega and different values for IMAX, JMax to get smaller dx, dy
+
 }

@@ -8,7 +8,7 @@
 #define IMAX    2
 #define JMAX    3
 #define OM      0.8
-#define EPS     0.95
+#define EPS     0.001
 // in this cas it is important for me to define dx, dy by my self
 // normaly I would calculate them with the given size of the problem
 #define DX      1
@@ -77,10 +77,10 @@ for(int j = 0; j < JMAX; j++){
 }
 
 /*
-printf(""\nresiduum struct"");
+printf("\nresiduum struct\n");
 for(int j = 0; j < JMAX; j++){
     for(int i = 0; i < IMAX; i++){
-        printf("%.6f\t",a[i].r);
+        printf("%.6f\t",a[(imax2-2)*j+i].r);
     }
     printf("\n");
 }
@@ -88,8 +88,8 @@ for(int j = 0; j < JMAX; j++){
 
 //calculate the abs(res)
 float residuum;
-residuum = abs_res(a, IMAX, JMAX);
-//printf("\nabs(res): %.6f \n", residuum);
+residuum = abs_res(a, IMAX+2, JMAX+2);
+printf("\nabs(res): %.6f \n", residuum);
 
 
 /////////////////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ for(int j = 0; j < JMAX+2; j++){
 // abs pressure
 float abspres;
 abspres = abs_pres(pres, imax2, jmax2);
-//printf("abs pres: %.6f\n", abspres);
+//printf("\nabs pres: %.6f\n", abspres);
 
 // test the pres_it function
 //if you want to test the SOR below and compare it with the results here you
@@ -175,7 +175,7 @@ abspres = abs_pres(pres, imax2, jmax2);
 
 // calculate pres twice
 
-//pres = pres_it(pres,  RHS, DX,  DY,  OM, p_it, imax2, jmax2);
+pres = pres_it(pres,  RHS, DX,  DY,  OM, p_it, imax2, jmax2);
 
 
 // print the new values
@@ -216,7 +216,7 @@ for(int j = 0; j < JMAX+2; j++){
 res * res_str;
 res_str = calloc((IMAX)*(JMAX),sizeof(res));
 
-res_str = res_struct(res_str, RHS, pres, res_func, DY,DX,imax2, jmax2 ); 
+res_str = res_struct(res_str, RHS, pres, res_func, DY,DX,imax2, jmax2); 
 
 /*
 // print it
@@ -231,7 +231,7 @@ for(int j = 0; j < JMAX; j++){
 
 // abs res
 float absres;
-absres = abs_res(res_str, IMAX, JMAX);
+absres = abs_res(res_str, IMAX+2, JMAX+2);
 //printf("abs res: %.6f\n", absres);
 
 
