@@ -7,7 +7,7 @@
 
 #define IMAX    2
 #define JMAX    3
-#define OM      0.8
+#define OM      1.3
 #define EPS     0.001
 // in this cas it is important for me to define dx, dy by my self
 // normaly I would calculate them with the given size of the problem
@@ -279,4 +279,4 @@ for(int j = 0; j < jmax2; j++){
         printf("\n");
         }
 
-}s
+}

@@ -1,18 +1,18 @@
 // test the SOR with the elliptical PDG laplace(p(x,y)) = -2p(x,y)
 // the solution is p(x,y) = -exp(x+y)
 // Idea: put righthandside RHS as -2*exp(x+y) [is 1/dt*(diff(F)/dx + diff(G)/dy) in equation (41)) and solve the equation with a startvector p_(it=0)
-
+//c 
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 
 //define the constants
-#define IMAX    400
-#define JMAX    400 //length of the lattice(begins at zero)
-#define XMAX    3//length of the lattice(begins at zero)
-#define YMAX    3
-#define OM      1.2
-#define EPS     2
+#define IMAX    300
+#define JMAX    300 //length of the lattice(begins at zero)
+#define XMAX    6//length of the lattice(begins at zero)
+#define YMAX    6
+#define OM      0.3
+#define EPS     0.2
 
 /* 
 filling of the latice with IMAX = 2, JMAX = 3
@@ -58,8 +58,8 @@ typedef struct
 
 typedef struct 
 {
-    float x;
-    float y;   
+    double x;
+    double y;   
 } xyel;
 
 // include the functions that we need
@@ -143,24 +143,9 @@ FILE * p_ana;
 
 fclose(p_ana);
 
-//define the struct for the RHS: -2*exp(x+y) and write the values into it
+//define the struct for the RHS
 rhs_struct * RHS; 
 RHS = calloc((IMAX+2)*(JMAX+2),sizeof(rhs_struct));
-for(int j =0; j < jmax2; j++){
-        for(int i = 0; i < imax2; i++){
-            RHS[j*imax2 + i].rhs = -2*testel[j*imax2 + i].e;
-        }
-    }
-
-/*
-printf("RHS\n");
-for(int j =0; j < jmax2; j++){
-        for(int i = 0; i < imax2; i++){
-            printf("%.6f\t", RHS[j*imax2 + i].rhs);
-        }
-        printf("\n");
-    }
-*/
 
 //define cell (it has 3 values (u,v,p) and we need it for in the right algrorithm. the aim of the SOR is to give the p value of the cell back)
 // What would be the first pressure I have to put in (p_(it=0))
@@ -173,23 +158,37 @@ h = calloc((IMAX+2)*(JMAX+2),sizeof(cell));
 
 for(int j =0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
-            h[j*imax2 + i].p = testel[j*imax2 + i].e - 0.001;
+            h[j*imax2 + i].p = testel[j*imax2 + i].e +1;
         }
-    }
+}
 
 
 // fill the start pressure with zeros
+/*for(int j =0; j < jmax2; j++){
+        for(int i = 0; i < imax2; i++){
+            h[j*imax2 + i].p = 0.1;
+        }
+    }*/
+
+
+// fill RHS with the first values of pressure (same one like the first one of the cell)
+for(int j =0; j < jmax2; j++){
+        for(int i = 0; i < imax2; i++){
+            RHS[j*imax2 + i].rhs = -2* h[j*imax2 + i].p;
+        }
+    }
+
 /*
 for(int j =0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
-            h[j*imax2 + i].p = 0;
+            RHS[j*imax2 + i].rhs =-2* 0.1;
         }
     }
 */
 
-// print RHS
+// print pressure
 /*
-printf("\nRHS\n");
+printf("\npressure 0\n");
 for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
            
@@ -198,6 +197,17 @@ for(int j = 0; j < jmax2; j++){
         printf("\n");
         }
 */
+
+// print RHS
+/*
+printf("\nRHS\n");
+for(int j = 0; j < jmax2; j++){
+        for(int i = 0; i < imax2; i++){
+            printf(" %.6f\t", RHS[imax2*j+i].rhs);
+        }
+        printf("\n");
+        }*/
+
 
 //define a resstruct that we need to caluculate the residuum
 res * res_st;
