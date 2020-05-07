@@ -30,7 +30,7 @@ xyel * xyvalues(xyel* xy, float dx, float dy, int imax2, int jmax2){
 }
 
 // function wich gives a struct back with boundary values and inner values
-ellip *ellipt_struct(ellip* el, xyel* xy, float (*ellipt)(float, float), int imax2, int jmax2){
+ellip *ellipt_struct(ellip* el, xyel* xy, int imax2, int jmax2){
     for(int j =0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
             el[j*imax2 + i].e = ellipt(xy[i].x, xy[j].y);

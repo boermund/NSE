@@ -175,7 +175,7 @@ abspres = abs_pres(pres, imax2, jmax2);
 
 // calculate pres twice
 
-pres = pres_it(pres,  RHS, DX,  DY,  OM, p_it, imax2, jmax2);
+//pres = pres_it(pres,  RHS, DX,  DY,  OM,  imax2, jmax2);
 
 
 // print the new values
@@ -191,7 +191,7 @@ for(int j = 0; j < JMAX+2; j++){
 
 
 
-//pres = pres_it(pres,  RHS, DX,  DY,  OM, p_it, imax2, jmax2);
+//pres = pres_it(pres,  RHS, DX,  DY,  OM, imax2, jmax2);
 
 /*
 printf("\nDruckwerte2:\n");
@@ -216,7 +216,7 @@ for(int j = 0; j < JMAX+2; j++){
 res * res_str;
 res_str = calloc((IMAX)*(JMAX),sizeof(res));
 
-res_str = res_struct(res_str, RHS, pres, res_func, DY,DX,imax2, jmax2); 
+res_str = res_struct(res_str, RHS, pres,  DY,DX,imax2, jmax2); 
 
 /*
 // print it
@@ -244,10 +244,6 @@ cell * h;
 
 h = calloc((imax2)*(jmax2),sizeof(cell));
 
-res * res_st;
-res_st = calloc((IMAX)*(JMAX),sizeof(res));
-
-
 // put in the cell struct the pressure values from above to look wether there are the same results
 for(int j = 0; j < jmax2; j++){
     for(int i = 0; i < imax2; i++){
@@ -267,7 +263,7 @@ printf("\nDruckwerte0- before SOR:\n");
 */   
 
 // if you want to compare the new pressures with that one obove you have to comment out that one above and calculate them new
-h = new_p(h, RHS, res_st, abs_pres, p_it, pres_it, res_func, res_struct, abs_res, DX, DY, OM, EPS, imax2, jmax2);
+h = new_p(h, RHS,  DX, DY, OM, EPS, imax2, jmax2);
 
 //print the new_p
 
