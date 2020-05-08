@@ -62,6 +62,7 @@ typedef struct
 #include "outputtest.h"
 #include "newspeed.h"
 #include "findgamma.h"
+#include "SOR.h"
 
 //main
 void main(){
@@ -76,13 +77,23 @@ void main(){
     
     old=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     
-    timestep=timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
     gamma = findgamma(old, IMAX+2, JMAX+2, timestep, dx, dy);
     old=vandp_linear(old,IMAX+2,JMAX+2);
 
     /*printf("%f",timestep);*/
     //old=outputtest(old,IMAX+2,JMAX+2);
+    float t = 0;
+    while(t<STOPT){
+        timestep    = timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
+        t           = t + timestep;
+        old         = cavity(old,IMAX+2,JMAX+2);
+        gamma       = findgamma(old, IMAX+2, JMAX+2, timestep, dx, dy);
+        passby      = new_f_and_g(old,IMAX+2,JMAX+2,dy,dy,timestep,gamma);
 
+
+        
+    }
+    //main loop
 
     temp = newspeed(old, IMAX+2, JMAX+2, dx ,dy, timestep, gamma);
     
@@ -90,7 +101,7 @@ void main(){
     newfield     = temp.field;
     // FG Randwerte
 
-    newfield=cavity(newfield,IMAX+2,JMAX+2);
+    
     
 
 
