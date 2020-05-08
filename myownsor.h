@@ -89,7 +89,7 @@ cell *newpressure(cell* field,f_and_g *newfg,int imax,int jmax,float dx,float dy
     }
     float residum = 0;
     int i = 0;
-    while((residum>EPSILON*pressure_res || i<10)&&(i<200000)){
+    while((residum>EPSILON*pressure_res || i<10)&&(i<20000)){
         i++;
         residum = 0;
         field = update_ghostcells(field,imax,jmax);
