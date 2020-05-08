@@ -25,60 +25,46 @@ float Gfunction(cell* field,int z,int imax, int jmax, float dt, float dx, float 
     return newG;
 }
 
-new_values newspeed(cell*old,int imax,int jmax,float dx,float dy,float dt, float gamma){
-    cell *newuv;
-    f_and_g *newfg; //In deiner Funktion wieder frei machen
-    newuv = calloc(imax*jmax,sizeof(cell));
-    newfg = calloc((imax)*(jmax),sizeof(f_and_g)); //Zwei kleiner weil die Randwertew fehlen
+cell *newspeed(cell*old,f_and_g *newfg,int imax,int jmax,float dx,float dy,float dt, float gamma){
+    //Zwei kleiner weil die Randwertew fehlen
     
 for(int i = 0; i < imax * jmax ;i++)
     {
-        if((i>imax+1 && (i<imax*(jmax-1)))&&((i%imax!=0)&&(i*imax!=imax-1))){
-        newfg[i].fvalue = Ffunction(old,i,imax,jmax,dt,dx,dy,gamma);
-        newfg[i].gvalue = Gfunction(old,i,imax,jmax,dt,dx,dy,gamma); 
+        //if((i>imax+1 && (i<imax*(jmax-1)))&&((i%imax!=0)&&(i*imax!=imax-1))){
         
-        newuv[i].u = newfg[i].fvalue -
+        old[i].u = newfg[i].fvalue -
         dt *
         first_d(old[i+1].p,old[i].p,dx);
 
-        newuv[i].v = newfg[i].gvalue -
+        old[i].v = newfg[i].gvalue -
         dt * 
         first_d(old[i+imax].p,old[i].p,dy);
-        }
-        newuv[i].p=old[i].p;
-        else{
-            
-        }
+        //printf("speed%d:%.2f\t%.2f\n",i,old[i].u,old[i].v);
         //printf("%d:\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t\n",i,newfg[i].fvalue,newfg[i].gvalue,newuv[i].u,newuv[i].v,newuv[i].p);
         //output(new,IMAX+2,JMAX+2);
     }
-    new_values passback;
-    passback.field = newuv;
-    //free(newuv);
-    passback.fg = newfg;
-    //free(newfg);
-    return passback;
+    return old;
 }
 
 f_and_g *new_f_and_g(cell*old,int imax,int jmax,float dx,float dy,float dt, float gamma){
-    cell *newuv;
     f_and_g *newfg; //In deiner Funktion wieder frei machen
-    newuv = calloc(imax*jmax,sizeof(cell));
     newfg = calloc((imax)*(jmax),sizeof(f_and_g)); //Zwei kleiner weil die Randwertew fehlen
-    
-for(int i = 0; i < imax * jmax ;i++)
+    printf("f&g");
+    for(int i = 0; i < imax * jmax ;i++)
     {
-        if((i>imax+1 && (i<imax*(jmax-1)))&&((i%imax!=0)&&(i*imax!=imax-1))){
+        if((i>imax && (i<imax*(jmax-1)))&&((i%imax!=0)&&(i%imax!=(imax-1)))){
         newfg[i].fvalue = Ffunction(old,i,imax,jmax,dt,dx,dy,gamma);
         newfg[i].gvalue = Gfunction(old,i,imax,jmax,dt,dx,dy,gamma); 
-    
+        }
+        else{
+            newfg[i].fvalue = old[i].u;
+            newfg[i].gvalue = old[i].v;
+        }
         //printf("%d:\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t\n",i,newfg[i].fvalue,newfg[i].gvalue,newuv[i].u,newuv[i].v,newuv[i].p);
         //output(new,IMAX+2,JMAX+2);
+        
+        //printf("%d:%.2f\t%.2f\n",i,newfg[i].fvalue,newfg[i].gvalue);
     }
-    new_values passback;
-    passback.field = newuv;
-    //free(newuv);
-    passback.fg = newfg;
-    //free(newfg);
-    return passback;
+
+    return newfg;
 }

@@ -32,7 +32,7 @@ float min(float a, float b, float c){
 float timecontrol(cell* feld,float tau,int imax,int jmax,float dx, float dy,float Re){
     cell max =  max_field(feld,imax, jmax);
     float newtime;
-    newtime =   tau * min(dx/max.u,dy/max.v,Re/2*1/(pow(dx,-2)+pow(dy,-2)));
+    newtime =   tau * min(dx/fabs(max.u),dy/fabs(max.v),Re/2*1/(pow(dx,-2)+pow(dy,-2)));
     //printf("\n%f",tau* min(dx/max.u,dy/max.v,Re/2*1/(pow(dx,-2)+pow(dy,-2))));
     //printf("\n%f\n",newtime);
     return newtime; 

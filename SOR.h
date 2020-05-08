@@ -9,7 +9,7 @@
 // p_it+1 function to calculate the new pressures 
 //returns a float
 float p_it(float xpi, float x, float xmi, float xpj, float xmj, float RHS, float dx, float dy, float omega){
-    printf("\nxpi: %.6f,  x: %.6f,  xmi: %.6f,  xpj: %.6f,  xmj: %.6f,  RHS: %.6f,  dx: %.6f,  dy: %.6f,  omega: %.6f\n", xpi,  x,  xmi,  xpj,  xmj,  RHS,  dx,  dy,  omega);
+    //printf("\nxpi: %.6f,  x: %.6f,  xmi: %.6f,  xpj: %.6f,  xmj: %.6f,  RHS: %.6f,  dx: %.6f,  dy: %.6f,  omega: %.6f\n", xpi,  x,  xmi,  xpj,  xmj,  RHS,  dx,  dy,  omega);
     return (1 - omega)*x + omega * (1/ (2*( 1/pow(dx,2) + 1/pow(dy,2)) ) ) * 
             ( (xpi + xmi)/pow(dx,2)  +  (xpj + xmj)/pow(dy,2)  -  RHS);
     }
@@ -231,7 +231,7 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
 
     // print the new pressure (it = 0)
     
-    
+    /*
     printf("\nDruckwerte0-SOR:\n");
     for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){ 
@@ -240,7 +240,7 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
         printf("\n");
         }
     
-
+    */
     // look that I get the right RHS
     /*
         printf("\nRHS-SOR\n");
@@ -278,9 +278,10 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
 
     // to test wether the SOR works for the first two iterations
     int i = 0;
-    while(i<10){//} && (absres < res_i || (i<10))){
-
-    //while(absres > epsilon * abs_pres0){
+    //while(i<10){//} && (absres < res_i || (i<10))){
+    printf("%f\t%f\n",absres,epsilon*abs_pres0);
+    while(absres > epsilon * abs_pres0){
+        printf("\n\nhello\n\n");
         printf("abs_pres0: %.14f", abs_pres0);
     
 
@@ -289,7 +290,7 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
 
 
         // print it
-        
+        /*
         printf("\npres:\n");
         for(int j = 0; j < jmax2; j++){
             for(int i = 0; i < imax2; i++){ 
@@ -297,14 +298,14 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
             }
             printf("\n");
             }
-        
+        */
 
     // calculate the residuum
         res_str = res_struct(res_str, RHS, pres,  dx, dy, imax2, jmax2);
 
     
     // print the residuum
-    
+    /*
     printf("\nres:\n");
         for(int j = 0; j < jmax2-2; j++){
             for(int i = 0; i < imax2-2; i++){ 
@@ -313,7 +314,7 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
             printf("\n");
             }
 
-    
+    */
         res_i = absres;
         // abs of residuum 
         absres = abs_res(res_str, imax2, jmax2);
@@ -327,7 +328,7 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
             }*/
 
         // print RHS
-        
+        /*
         printf("\nRHS\n");
         for(int j = 0; j < jmax2; j++){
                 for(int i = 0; i < imax2; i++){
@@ -336,7 +337,7 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
                 }
                 printf("\n");
                 }
-        
+        */
         
 
 

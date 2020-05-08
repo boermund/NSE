@@ -5,17 +5,18 @@
 #include <stdlib.h>
 
 
-#define RE      100
-#define A       5.0
-#define B       5.0
+#define RE      1000
+#define A       10.0
+#define B       10.0
 #define IMAX    10
-#define JMAX    100 
-#define UMAX    10
-#define VMAX    10
-#define TAU     0.5 //Factor for adaptive step control
-#define OMEGA   0.5 //Relaxation Factor
+#define JMAX    10
+#define UMAX    1
+#define VMAX    1
+#define TAU     0.8 //Factor for adaptive step control
+#define OMEGA   1.7 //Relaxation Factor
+#define EPSILON 0.1
 #define STARTT  0  
-#define STOPT   10
+#define STOPT   2
 #define PI      3.14
 #define GY      0
 #define GX      0
@@ -62,43 +63,44 @@ typedef struct
 #include "outputtest.h"
 #include "newspeed.h"
 #include "findgamma.h"
-#include "SOR.h"
+#include "myownsor.h"
 
 //main
 void main(){
     cell *old;
-    cell *newfield;
-    new_values temp;
     f_and_g *passby;
     float gamma = 0;
     float dx,dy,timestep;
     dx = A/IMAX;
     dy= B/JMAX;
-    
+    //rhs_struct *RHS;
+    //RHS = calloc((IMAX+2)*(JMAX+2),sizeof(rhs_struct)); 
     old=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     
-    gamma = findgamma(old, IMAX+2, JMAX+2, timestep, dx, dy);
-    old=vandp_linear(old,IMAX+2,JMAX+2);
-
-    /*printf("%f",timestep);*/
-    //old=outputtest(old,IMAX+2,JMAX+2);
+    
     float t = 0;
-    while(t<STOPT){
+    int i = 0;
+    while(i<50){
+        old         = cavity(old,IMAX+2,JMAX+2);
         timestep    = timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
         t           = t + timestep;
-        old         = cavity(old,IMAX+2,JMAX+2);
+        //printf("Zeit:%f\n",timestep);
         gamma       = findgamma(old, IMAX+2, JMAX+2, timestep, dx, dy);
+        
         passby      = new_f_and_g(old,IMAX+2,JMAX+2,dy,dy,timestep,gamma);
-
-
+        //RHS         = rhs_func(RHS, passby, dx, dy, timestep, IMAX+2, JMAX+2);
+        
+        old         = newpressure(old,passby,IMAX+2,JMAX+2,dx,dy,timestep);
+        //printf("\nhello\n");
+        old         = newspeed(old, passby,IMAX+2,JMAX+2,dx,dy,timestep,gamma);
+        printf("Durchlauf:%d \t Zeit %f \n",i,t);
+        i++;
         
     }
     //main loop
+    old = cavity(old,IMAX+2,JMAX+2);
+    output(old,IMAX+2,JMAX+2);
 
-    temp = newspeed(old, IMAX+2, JMAX+2, dx ,dy, timestep, gamma);
-    
-    passby  = temp.fg;
-    newfield     = temp.field;
     // FG Randwerte
 
     
@@ -106,7 +108,6 @@ void main(){
 
 
     // Druck in den Randzellen anpassen
-    output(newfield,IMAX+2,JMAX+2);
     //printf("%.2f", old->v);
     //free(newfield);
     //free(old);
