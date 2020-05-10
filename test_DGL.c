@@ -8,10 +8,10 @@
 
 //define the constants
 #define IMAX    5
-#define JMAX    5 //length of the lattice(begins at zero)
+#define JMAX    10  //length of the lattice(begins at zero)
 #define XMAX    1//length of the lattice(begins at zero)
 #define YMAX    1
-#define OM      1.5
+#define OM      1.8
 #define EPS     0.2
 
 /* 
@@ -20,7 +20,6 @@ filling of the latice with IMAX = 2, JMAX = 3
 4 5 6
 7 8 9
 */
-
 
 // define structs
 typedef struct 
@@ -66,8 +65,6 @@ typedef struct
 #include "SOR.h"
 #include "test_DGL.h"
 
-
-
 // begin mainfunction
 void main(){
 
@@ -88,13 +85,13 @@ xy = xyvalues(xy, dx, dy, imax2, jmax2);
 
 
 //print them
-printf("\nxyvalues\n");
+/*printf("\nxyvalues\n");
 for(int j =0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
             printf("x: %.6f\t y: %.6f\t", xy[j*imax2 + i].x, xy[j*imax2 + i].y);
         }
         printf("\n");
-    }
+    }*/
 
 
 // put x and y values into a file
@@ -121,13 +118,13 @@ testel = ellipt_struct(testel, xy, imax2, jmax2);
 
 
 //print them
-printf("values -exp(x+y)\n");
+/*printf("values sin(x+y)\n");
 for(int j =0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
             printf("%.6f\t", testel[j*imax2 + i].e);
         }
         printf("\n");
-    }
+    }*/
 
 
 // put the analytical values into a file
@@ -158,9 +155,9 @@ h = calloc((IMAX+2)*(JMAX+2),sizeof(cell));
 
 
 
-for(int j =0; j < 2; j++){
+for(int j =0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
-            h[j*imax2 + i].p = ellipt(xy[i].x, xy[j].y );
+            h[j*imax2 + i].p = testel[j*imax2 + i].e - 0.1;
         }
 }
 
@@ -190,6 +187,7 @@ for(int j =0; j < jmax2; j++){
 
 // print pressure
 
+/*
 printf("\npressure 0\n");
 for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
@@ -197,7 +195,7 @@ for(int j = 0; j < jmax2; j++){
             printf(" %.6f\t", h[imax2*j+i].p);
         }
         printf("\n");
-        }
+        }*/
 
 
 // print RHS
@@ -217,6 +215,7 @@ h = new_p(h,RHS, dx, dy, OM, EPS, imax2, jmax2);
 //print the new_p an put them in to a txt file
 FILE * newp;
     newp = fopen("new_p.txt", "w+");
+
 //as I understand, it has to be -exp(x+y) with the values we already calculated
 
 printf("\nNew pressure/ solve of the PDG\n");

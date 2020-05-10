@@ -3,6 +3,7 @@ cell* cavity(cell *field,int imax, int jmax)
 {
     int a=0;
     float b=1;
+    
     for(int i = 0;i<imax;i++)
     {
         field[(jmax-1)*imax+i].v    = -field[(jmax-2)*imax+i].v;

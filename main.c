@@ -63,7 +63,7 @@ typedef struct
 #include "outputtest.h"
 #include "newspeed.h"
 #include "findgamma.h"
-#include "myownsor.h"
+#include "SOR.h"
 
 //main
 void main(){
@@ -73,9 +73,9 @@ void main(){
     float dx,dy,timestep;
     dx = A/IMAX;
     dy= B/JMAX;
-    //rhs_struct *RHS;
-    //RHS = calloc((IMAX+2)*(JMAX+2),sizeof(rhs_struct)); 
-    old=fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
+    rhs_struct *RHS;
+    RHS = calloc((IMAX+2)*(JMAX+2),sizeof(rhs_struct)); 
+    old = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     
     
     float t = 0;
@@ -89,8 +89,8 @@ void main(){
         
         passby      = new_f_and_g(old,IMAX+2,JMAX+2,dy,dy,timestep,gamma);
         //RHS         = rhs_func(RHS, passby, dx, dy, timestep, IMAX+2, JMAX+2);
-        
-        old         = newpressure(old,passby,IMAX+2,JMAX+2,dx,dy,timestep);
+        RHS         = rhs_func(RHS, passby, dx ,dy ,timestep ,IMAX+2, JMAX+2); 
+        old         = new_p(old, RHS, dx, dy, OMEGA, EPSILON, IMAX+2, JMAX+2);
         //printf("\nhello\n");
         old         = newspeed(old, passby,IMAX+2,JMAX+2,dx,dy,timestep,gamma);
         printf("Durchlauf:%d \t Zeit %f \n",i,t);

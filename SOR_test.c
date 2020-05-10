@@ -23,7 +23,6 @@ filling of the latice with IMAX = 2, JMAX = 3
 7 8 9
 */
 
-
 typedef struct 
 {
     float r;  
@@ -154,7 +153,6 @@ for(int j = 0; j < JMAX+2; j++){
 
 
 // print them
-
 printf("\nDruckwerte0:\n");
 for(int j = 0; j < JMAX+2; j++){
     for(int i = 0; i < IMAX+2; i++){
@@ -179,7 +177,6 @@ abspres = abs_pres(pres, imax2, jmax2);
 
 
 // print the new values
-
 /*
 printf("\nDruckwerte1:\n");
 for(int j = 0; j < JMAX+2; j++){
@@ -266,7 +263,6 @@ printf("\nDruckwerte0- before SOR:\n");
 h = new_p(h, RHS,  DX, DY, OM, EPS, imax2, jmax2);
 
 //print the new_p
-
 printf("\nNew pressure/ solve of the PDG\n");
 for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
