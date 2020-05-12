@@ -7,8 +7,8 @@
 //presure
 
 // p_it+1 function to calculate the new pressures 
-//returns a float
-//float p_it(float xpi, float x, float xmi, float xpj, float xmj, float RHS, float dx, float dy, float omega){
+//returns a double
+double p_it(double xpi, double x, double xmi, double xpj, double xmj, double RHS, double dx, double dy, double omega){
     //printf("\nxpi: %.6f,  x: %.6f,  xmi: %.6f,  xpj: %.6f,  xmj: %.6f,  RHS: %.6f,  dx: %.6f,  dy: %.6f,  omega: %.6f\n", xpi,  x,  xmi,  xpj,  xmj,  RHS,  dx,  dy,  omega);
     return (1 - omega)*x + omega * (1/ (2*( 1/pow(dx,2) + 1/pow(dy,2)) ) ) * 
             ( (xpi + xmi)/pow(dx,2)  +  (xpj + xmj)/pow(dy,2)  -  RHS);
@@ -16,14 +16,14 @@
 
 // p_it+1 struct
 // returns a struct with all p_it+1 values
-presit * pres_it(presit * pres, rhs_struct * RHS, float dx, float dy, float omega, int imax2, int jmax2){
+presit * pres_it(presit * pres, rhs_struct * RHS, double dx, double dy, double omega, int imax2, int jmax2){
     // fill boundary cells 
     // we first have to fill the left and upper boundary 
     // than claculate the pressure 
     // and  at last we have to fill the right and under boundary
 
     // define a array to the values for the right and under boundary
-    float pbi[imax2], pbj[jmax2];
+    double pbi[imax2], pbj[jmax2];
 
     // new i boundaries left and saving of the rigth boundaries
     // the left boundaries have the same values like the one right next to them
@@ -92,10 +92,10 @@ presit * pres_it(presit * pres, rhs_struct * RHS, float dx, float dy, float omeg
 }
 
 // abs(pres_it = 0) as L_2 norm
-// returns a float
-float abs_pres(presit * pres, int imax2, int jmax2){
+// returns a double
+double abs_pres(presit * pres, int imax2, int jmax2){
 
-    float abs_pres = 0;
+    double abs_pres = 0;
 
     for(int j = 1; j < jmax2-1; j++){
         for(int i = 1; i < imax2-1; i++){
@@ -110,7 +110,7 @@ float abs_pres(presit * pres, int imax2, int jmax2){
 
 // RHS
 //returns a struct with the values of the RHS of equation (41)
-rhs_struct *rhs_func( rhs_struct * RHS, f_and_g * fg, float dx, float dy, float dt, int imax2, int jmax2){
+rhs_struct *rhs_func( rhs_struct * RHS, f_and_g * fg, double dx, double dy, double dt, int imax2, int jmax2){
 
     // look that we get the right f and g values
     /*
@@ -139,12 +139,12 @@ return RHS;
 // residuum
 
 //function to caltculate the values of the residuum
-float res_func(float ppi, float p, float pmi, float ppj, float pmj, float dx, float dy,  float rhs ){
+double res_func(double ppi, double p, double pmi, double ppj, double pmj, double dx, double dy,  double rhs ){
     return (ppi - 2* p + pmi)/pow(dx,2) + (ppj - 2* p + pmj)/pow(dy,2) - rhs;
 }
 
 // returns a struct for the ressiduum 
-res *res_struct(res * res_str, rhs_struct * RHS, presit * pres, float dx, float dy, int imax2, int jmax2){
+res *res_struct(res * res_str, rhs_struct * RHS, presit * pres, double dx, double dy, int imax2, int jmax2){
 
 for(int j = 1; j < jmax2-1; j++){
     for(int i = 1; i < imax2-1; i++){
@@ -155,10 +155,10 @@ return res_str;
 }
 
 // abs(residuum) as L_2 norm
-// returns a float
-float abs_res(res * resi, int imax2, int jmax2){
+// returns a double
+double abs_res(res * resi, int imax2, int jmax2){
     
-    float residuum = 0;
+    double residuum = 0;
 
     /*printf("\nresiduum struct\n");
     for(int j = 0; j < JMAX; j++){
@@ -184,7 +184,7 @@ float abs_res(res * resi, int imax2, int jmax2){
 //SOR
 // put everything for one it-step togehter:
 
-cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  float epsilon, int imax2, int jmax2){
+cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  double epsilon, int imax2, int jmax2){
 
     // define the pressure in wich I can put the values of the bigger cell struct
     presit * pres; 
@@ -226,16 +226,16 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
     //calculate abs(p_it)
     // as I understand I have only to calculate only the abs(presure) once: for p_(it = 0)
     // in this case I get the problem that if I choose pressur p=0 for all values of the strcuct the abs is zero and the loop will never end
-    float abs_pres0 = 0;
+    double abs_pres0 = 0;
     abs_pres0 = abs_pres(pres, imax2, jmax2);
     printf("\nabspres0: %.6f\n", abs_pres0);
 
     //verry high ressidumm to start the while loop
     res_str = res_struct(res_str, RHS, pres, dx, dy, imax2, jmax2);
-    float absres  =  abs_res(res_str, imax2, jmax2); 
+    double absres  =  abs_res(res_str, imax2, jmax2); 
 
     // chose the maximum of small or abs_pres0 to avoid that the loop never ends (abs_pres0 = 0)
-    float small = 0.001;
+    double small = 0.001;
 
     if(small>abs_pres0){
         abs_pres0 = small;
@@ -245,14 +245,14 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
     //printf("abs_pres0: %.6f", abs_pres0);
     
     //whileloop
-    float res_i = INFINITY ;
+    double res_i = INFINITY ;
 
     // to test wether the SOR works for the first two iterations
     int i = 0;
-    while(i<1000){//} && (absres < res_i || (i<10))){
+    //while(((absres < res_i || (i<10)))){
 
-    //while(absres > epsilon * abs_pres0){
-        printf("abs_pres0: %.14f", abs_pres0);
+    do{
+        
     
 
         // calculate the new pessure
@@ -287,8 +287,11 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
         res_i = absres;
         // abs of residuum 
         absres = abs_res(res_str, imax2, jmax2);
-        printf(" \nabsres: %.6f\n", absres);
-
+        //if(i%100==0){
+        printf("abs_pres0: %f", abs_pres0);
+        printf(" \nabsres: %f\n", absres);
+        printf("%d\n", i);
+        //}
         //for the DGL test: fill RHS with the new pressure values multiplcated with -2
         /* for(int j = 0; j < jmax2; j++){
             for(int i = 0; i < imax2; i++){ 
@@ -310,10 +313,10 @@ cell *new_p(cell * newp, rhs_struct *RHS, float dx, float dy, float omega,  floa
         
         //test the first two iterations
         i+=1;
-        printf("%d\n", i);
+        
         // end of while loop
 
-    }
+    }while((i<20000)&&(absres > epsilon * abs_pres0));
 
     // put the new pressure values into the cell
     for(int j = 0; j < jmax2; j++){

@@ -1,12 +1,12 @@
-float max(float a, float b){
-    float max   = a;
+double max(double a, double b){
+    double max   = a;
     if(max<b)
         max     = b;
     return max;
 }
 
-float findgamma(cell* field, int imax, int jmax, float dt, float dx, float dy){
+double findgamma(cell* field, int imax, int jmax, double dt, double dx, double dy){
     cell maxcell = max_field(field, imax, jmax);
-    float gamma = max(maxcell.u*dt/dx,maxcell.v*dt/dy);
+    double gamma = max(maxcell.u*dt/dx,maxcell.v*dt/dy);
     return gamma;
 }

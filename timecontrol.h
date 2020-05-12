@@ -19,8 +19,8 @@ cell max_field(cell *field,int imax, int jmax){
     return max;
 }
 
-float min(float a, float b, float c){
-    float min   = a;
+double min(double a, double b, double c){
+    double min   = a;
     if(min>b)
         min     = b;
     if(min>c)
@@ -29,9 +29,9 @@ float min(float a, float b, float c){
 }
 
 
-float timecontrol(cell* feld,float tau,int imax,int jmax,float dx, float dy,float Re){
+double timecontrol(cell* feld,double tau,int imax,int jmax,double dx, double dy,double Re){
     cell max =  max_field(feld,imax, jmax);
-    float newtime;
+    double newtime;
     newtime =   tau * min(dx/fabs(max.u),dy/fabs(max.v),Re/2*1/(pow(dx,-2)+pow(dy,-2)));
     //printf("\n%f",tau* min(dx/max.u,dy/max.v,Re/2*1/(pow(dx,-2)+pow(dy,-2))));
     //printf("\n%f\n",newtime);

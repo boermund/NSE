@@ -5,33 +5,33 @@
 #include <stdlib.h>
 
 
-#define RE      1000
-#define A       10.0
-#define B       10.0
-#define IMAX    10
-#define JMAX    10
+#define RE      10
+#define A       1.0
+#define B       1.0
+#define IMAX    100
+#define JMAX    100
 #define UMAX    1
 #define VMAX    1
 #define TAU     0.8 //Factor for adaptive step control
 #define OMEGA   1.7 //Relaxation Factor
-#define EPSILON 0.1
+#define EPSILON 0.01
 #define STARTT  0  
-#define STOPT   2
+#define STOPT   1
 #define PI      3.14
 #define GY      0
 #define GX      0
 //structure for filling the array
 typedef struct
 {
-    float p;
-    float u;
-    float v;
+    double p;
+    double u;
+    double v;
 } cell;
 
 typedef struct
 {
-    float fvalue;
-    float gvalue;
+    double fvalue;
+    double gvalue;
 } f_and_g;
 
 typedef struct
@@ -42,17 +42,17 @@ typedef struct
 
 typedef struct 
 {
-    float r;  
+    double r;  
 } res;
 
 typedef struct 
 {
-    float p;  
+    double p;  
 } presit;
 
 typedef struct 
 {
-    float rhs;  
+    double rhs;  
 } rhs_struct;
 
 #include "derivates.h"
@@ -69,8 +69,8 @@ typedef struct
 void main(){
     cell *old;
     f_and_g *passby;
-    float gamma = 0;
-    float dx,dy,timestep;
+    double gamma = 0;
+    double dx,dy,timestep;
     dx = A/IMAX;
     dy= B/JMAX;
     rhs_struct *RHS;
@@ -78,7 +78,7 @@ void main(){
     old = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     
     
-    float t = 0;
+    double t = 0;
     int i = 0;
     while(i<50){
         old         = cavity(old,IMAX+2,JMAX+2);
@@ -95,6 +95,7 @@ void main(){
         old         = newspeed(old, passby,IMAX+2,JMAX+2,dx,dy,timestep,gamma);
         printf("Durchlauf:%d \t Zeit %f \n",i,t);
         i++;
+        free(passby);
         
     }
     //main loop
