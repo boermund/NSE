@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
+from matplotlib.backends.backend_pdf import PdfPages
 
 # Put x and y values into an array
 
@@ -24,6 +25,17 @@ X, Y = np.meshgrid(X, Y)
  
 surf = ax.plot_surface(X, Y, Z, cmap=cm.viridis,
                        linewidth=0, antialiased=False)
-surf = ax.plot_surface(X, Y, W, cmap=cm.plasma,
-                       linewidth=0, antialiased=False)  
+#surf = ax.plot_surface(X, Y, W, cmap=cm.plasma,
+ #                   linewidth=0, antialiased=False)  
+ax.view_init(5, 55)
+
 plt.show()
+
+#with PdfPages('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/BilderSOR-Test/sinxplusy_nach_änderung_1000IT_p_0_Auf_100x100_res_0,1.pdf') as pdf:
+   # pdf.savefig(fig)
+
+
+#with PdfPages('C:/Users/Anna Rockstroh/Documents/Studium/1 Physik/3 F-Praktikum/CP Navier Stokes/BilderSOR-Test/analytische_lsg.pdf') as pdf:
+ #   pdf.savefig(fig)
+
+   
