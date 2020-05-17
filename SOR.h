@@ -185,7 +185,7 @@ double abs_res(res * resi, int imax2, int jmax2){
 // put everything for one it-step togehter:
 
 cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  double epsilon, int imax2, int jmax2){
-
+    
     // define the pressure in wich I can put the values of the bigger cell struct
     presit * pres; 
     pres = calloc((imax2)*(jmax2),sizeof(presit)); 
@@ -288,9 +288,11 @@ cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  d
         // abs of residuum 
         absres = abs_res(res_str, imax2, jmax2);
         //if(i%100==0){
-        printf("abs_pres0: %f", abs_pres0);
-        printf(" \nabsres: %f\n", absres);
+        if(i%100==0){
+        printf("abs_pres0: %.10f", abs_pres0);
+        printf(" \nabsres: %.10f\n", absres);
         printf("%d\n", i);
+        }
         //}
         //for the DGL test: fill RHS with the new pressure values multiplcated with -2
         /* for(int j = 0; j < jmax2; j++){
@@ -316,7 +318,7 @@ cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  d
         
         // end of while loop
 
-    }while((i<20000)&&(absres > epsilon * abs_pres0));
+    }while((absres > epsilon * abs_pres0));
 
     // put the new pressure values into the cell
     for(int j = 0; j < jmax2; j++){
