@@ -51,19 +51,21 @@ f_and_g *new_f_and_g(cell*old,f_and_g* newfg,int imax2,int jmax2,double dx,doubl
     //newfg = calloc((imax2)*(jmax2),sizeof(f_and_g)); //Zwei kleiner weil die Randwertew fehlen
     for(int i = 0; i < imax2 * jmax2 ;i++)
     {
-        if((i > imax2 && (i < imax2 * (jmax2 - 1))) && ((i % imax2 != 0) && (i % imax2 != (imax2 - 1)))){
+        if((i > 1 * imax2 && (i < imax2 * (jmax2 - 1))) && ((i % imax2 != 0) && ((i+2) % imax2 != 0) && ((i+1) % imax2 != 0))){
             newfg[i].fvalue = Ffunction(old,i,imax2,jmax2,dt,dx,dy,gamma); //Ableitung benötigt Werte die eigentlich ausserhalb von Rand liegen
         }
         else{
-            newfg[i].fvalue = old[i].u; 
+            if((i+1)%imax2 != 0)
+                newfg[i].fvalue = old[i].u; 
         }
-        if((i > 1 * imax2 && (i < imax2 * (jmax2-1))) && (( i % imax2 != 0) && (i % imax2 != (imax2 - 1))))
+        if((i > 2 * imax2 && (i < imax2 * (jmax2-1))) && (( i % imax2 != 0) && (i % imax2 != (imax2 - 1))))
         {
             newfg[i].gvalue = Gfunction(old,i,imax2,jmax2,dt,dx,dy,gamma); 
         }
         else
         {
-            newfg[i].gvalue = old[i].v;
+            if(i>=imax2)
+                newfg[i].gvalue = old[i].v;
         }
         
         

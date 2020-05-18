@@ -175,10 +175,10 @@ cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  d
         absres = abs_res(res_str, imax2, jmax2);
 
         
-        //if(i%100==0){
-        printf("\nabs_pres0: %f, absres: %f \n", abs_pres0, absres);
+        if(i%100==0){
+        printf(" abs_pres0: %.9f, absres: %f \t", barrier, absres);
         printf("%d\n", i);
-        
+        }
         //test the first two iterations
         i+=1;
         
