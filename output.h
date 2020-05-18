@@ -12,7 +12,7 @@ void output(cell *field,int imax,int jmax)
 
     printf("\nhello2\n");
     for (int z = 0; z < IMAX * JMAX; z++)
-        //printf("%d:\t%.2f\t%.2f\t%.2f\n",z,field[z].u,field[z].v,field[z].p);
+        printf("%d:\t%.2f\t%.2f\t%.2f\n",z,field[z].u,field[z].v,field[z].p);
     for(int j=0;j<jmax;j++){
         for(int i=0;i<imax;i++){
             fprintf(vspeed,"%.2f,",field[i+imax*j].v);

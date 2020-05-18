@@ -1,32 +1,35 @@
 
-cell* cavity(cell *field,int imax, int jmax)
+cell* cavity(cell *field,int imax2, int jmax2)
 {
-    int a=0;
-    double b=0.05;
+    double a = 0;
+    double b = 4;
     /*
-    for(int i=0;i<imax*jmax;i++){
+    for(int i=0;i<imax2*jmax2;i++){
         field[i].v  = 0.01;
         field[i].u  = 0;
         field[i].p  = 0;
         //printf("%d:%.2f\t%.2f\t%.2f\n",i,field[i].u,field[i].v,field[i].p);
     }
     */
-    for(int i = 0;i<imax;i++)
+    for(int i = 0;i<imax2;i++)
     {
-        field[(jmax-1)*imax+i].v    = -field[(jmax-2)*imax+i].v;
-        field[(jmax-1)*imax+i].u    = a;
-        field[i+imax*1].u                  = b;
-        //printf("%f\n",field[i+imax].u);
-        field[i].v                  = -field[i+imax].v;
+        field[(jmax2-1)*imax2+i].u    = -field[(jmax2-2)*imax2+i].u;
+        field[(jmax2-1)*imax2+i].v    = a;
+        field[i+imax2*0].u           = 2 * b - field[i+imax2*1].u;
+        field[i+imax2*1].v           = a;
+        field[i].v                  = -0;
+        //printf("%f\n",field[i+imax2].u);
+        field[i].v                  = -field[i+imax2].v;
     }
-    for(int j = 0;j<jmax;j++)
+    for(int j = 0;j<jmax2;j++)
     {
-        field[j*(imax)].u           = -field[j*(imax)+1].u;
-        //printf("%f",-field[j*(imax)+1].u);
-        field[j*(imax)].v           = a;
-        field[j*(imax)+imax-1].u    = -field[j*(imax)+imax-2].u;
-        field[j*(imax)+imax-2].v    = a;
-        //field[j*imax + imax-3].u    = -3;
+        field[j*(imax2)].v           = -field[j*(imax2)+1].v;
+        //printf("%f",-field[j*(imax2)+1].u);
+        field[j*(imax2)].u           = a;
+        field[j*(imax2)+imax2-1].v    = -field[j*(imax2)+imax2-2].v;
+        field[j*(imax2)+imax2-2].u    = a;
+        field[j*(imax2)+imax2-1].u    = -0;
+        //field[j*imax2 + imax2-3].u    = -3;
     
     }
     
