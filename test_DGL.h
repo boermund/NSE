@@ -7,7 +7,6 @@
 // function wich solve the DGL
 double ellipt(double x, double y){
     return sin(x+y);
-
 }
 
 // returns a struct with the xy values to calculate the analytical pressure
