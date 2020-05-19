@@ -5,20 +5,20 @@
 #include <stdlib.h>
 
 
-#define RE      5
+#define RE      10
 #define A       1.0
 #define B       1.0
-#define IMAX    300
-#define JMAX    300
+#define IMAX    150
+#define JMAX    150
 #define UMAX    1
 #define VMAX    1
 #define TAU     0.8 //Factor for adaptive step control
 #define OMEGA   1.7 //Relaxation Factor
-#define EPSILON 0.001
+#define EPSILON 0.01
 #define STARTT  0  
-#define STOPT   10
+#define STOPT   1
 #define PI      3.14
-#define GY      1
+#define GY      0
 #define GX      0
 //structure for filling the array
 typedef struct
@@ -80,7 +80,7 @@ void main(){
     passby = calloc((IMAX+2)*(JMAX+2),sizeof(f_and_g));
     
     double t = 0;
-    //int i = 0;
+    int i = 0;
 
     while(t < STOPT){
         
@@ -96,8 +96,16 @@ void main(){
         old         = new_p(old, RHS, dx, dy, OMEGA, EPSILON, IMAX+2, JMAX+2);
         //printf("\nhello\n");
         old         = newspeed(old, passby,IMAX+2,JMAX+2,dx,dy,timestep,gamma);
-        printf("Durchlauf: \t Zeit %f \n",t);
-        //i++;
+        printf("Durchlauf: %d\t Zeit %f \n",i,t);
+        i++;
+        if(i%(50==0) && (i<1000)){
+            output(old,IMAX+2,JMAX+2);
+            printf("output done");
+        }
+        if(i%(1000==0) && (i>1000)){
+            output(old,IMAX+2,JMAX+2);
+            printf("output done");
+        }
                 
     }
     //main loop
