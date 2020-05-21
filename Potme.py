@@ -51,7 +51,7 @@ print(uspeed,vspeed,pressure)
 a = np.linspace(0,x,int(y/x))
 b = np.linspace(0,int(y/x),x)
 X ,Y= np.meshgrid(b,a)
-"""
+
 fig = pyplot.figure(figsize=(11, 7), dpi=100)
 pyplot.contourf(X, Y, pressure, alpha=0.5, cmap=cm.viridis)
 pyplot.colorbar()
@@ -70,3 +70,4 @@ pyplot.streamplot(X, Y, uspeed, vspeed)
 pyplot.xlabel('X')
 pyplot.ylabel('Y')
 pyplot.show()
+"""

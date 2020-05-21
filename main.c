@@ -5,18 +5,18 @@
 #include <stdlib.h>
 
 
-#define RE      10
+#define RE      1
 #define A       1.0
 #define B       1.0
-#define IMAX    150
-#define JMAX    150
-#define UMAX    1
-#define VMAX    1
+#define IMAX    500
+#define JMAX    500    
+#define UMAX    10
+#define VMAX    10
 #define TAU     0.8 //Factor for adaptive step control
 #define OMEGA   1.7 //Relaxation Factor
-#define EPSILON 0.01
+#define EPSILON 0.000001
 #define STARTT  0  
-#define STOPT   1
+#define STOPT   100
 #define PI      3.14
 #define GY      0
 #define GX      0
@@ -82,7 +82,7 @@ void main(){
     double t = 0;
     int i = 0;
 
-    while(t < STOPT){
+    while(i < 5){
         
         old         = cavity(old,IMAX+2,JMAX+2);
         timestep    = timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
@@ -98,11 +98,15 @@ void main(){
         old         = newspeed(old, passby,IMAX+2,JMAX+2,dx,dy,timestep,gamma);
         printf("Durchlauf: %d\t Zeit %f \n",i,t);
         i++;
-        if(i%(50==0) && (i<1000)){
+        
+        if((i%50==0) && (i<1000)){
+            old         = cavity(old,IMAX+2,JMAX+2);
             output(old,IMAX+2,JMAX+2);
             printf("output done");
         }
-        if(i%(1000==0) && (i>1000)){
+        
+        if((i%1000==0) && (i>1000)){
+            old         = cavity(old,IMAX+2,JMAX+2);
             output(old,IMAX+2,JMAX+2);
             printf("output done");
         }
