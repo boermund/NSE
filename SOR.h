@@ -136,7 +136,7 @@ cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  d
     // get p_it from the big struct
     for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
-            pres[imax2*j+i].p = newp[imax2*j+i].p; 
+            pres[imax2*j+i].p = 0;//newp[imax2*j+i].p; 
         }
         }
 

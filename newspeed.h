@@ -31,14 +31,18 @@ cell *newspeed(cell*old,f_and_g *newfg,int imax2,int jmax2,double dx,double dy,d
 for(int i = 0; i < imax2 * jmax2 ;i++)
     {
         //if((i>imax2+1 && (i<imax2*(jmax2-1)))&&((i%imax2!=0)&&(i*imax2!=imax2-1))){
-        
+        if((i < (imax2 * (jmax2 - 1))) && ((i+1) % imax2 != 0)){
         old[i].u = newfg[i].fvalue -
         dt *
         first_d(old[i+1].p,old[i].p,dx);
-
         old[i].v = newfg[i].gvalue -
         dt * 
         first_d(old[i+imax2].p,old[i].p,dy);
+        }
+        else{
+            old[i].v=0;
+            old[i].u=0;
+        }
         //printf("speed%d:%.2f\t%.2f\n",i,old[i].u,old[i].v);
         //printf("%d:\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t\n",i,newfg[i].fvalue,newfg[i].gvalue,newuv[i].u,newuv[i].v,newuv[i].p);
         //output(new,imax2+2,jmax2+2);
@@ -58,7 +62,7 @@ f_and_g *new_f_and_g(cell*old,f_and_g* newfg,int imax2,int jmax2,double dx,doubl
             if((i+1)%imax2 != 0)
                 newfg[i].fvalue = old[i].u;
             else
-               newfg[i].gvalue = 0;
+               newfg[i].gvalue = old[i-1].u;
              
         }
         if((i > 2 * imax2 && (i < imax2 * (jmax2-1))) && (( i % imax2 != 0) && ((i+1) % imax2 != 0)))
@@ -70,7 +74,7 @@ f_and_g *new_f_and_g(cell*old,f_and_g* newfg,int imax2,int jmax2,double dx,doubl
             if(i>=imax2)
                 newfg[i].gvalue = old[i].v;
             else 
-                newfg[i].gvalue = 0;
+                newfg[i].gvalue = newfg[i+imax2].gvalue;
         }
         
         

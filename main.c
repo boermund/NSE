@@ -5,16 +5,16 @@
 #include <stdlib.h>
 
 
-#define RE      1
+#define RE      10
 #define A       1.0
 #define B       1.0
-#define IMAX    500
-#define JMAX    500    
-#define UMAX    10
-#define VMAX    10
+#define IMAX    150
+#define JMAX    150
+#define UMAX    0.01
+#define VMAX    0.01
 #define TAU     0.8 //Factor for adaptive step control
 #define OMEGA   1.7 //Relaxation Factor
-#define EPSILON 0.000001
+#define EPSILON 0.00001
 #define STARTT  0  
 #define STOPT   100
 #define PI      3.14
@@ -78,42 +78,42 @@ void main(){
     RHS = calloc((IMAX+2)*(JMAX+2),sizeof(rhs_struct)); 
     old = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
     passby = calloc((IMAX+2)*(JMAX+2),sizeof(f_and_g));
-    
     double t = 0;
     int i = 0;
 
-    while(i < 5){
+    while(t < STOPT){
         
-        old         = cavity(old,IMAX+2,JMAX+2);
+        old         = cavity(old,IMAX+2,JMAX+2, i);
         timestep    = timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
         t           = t + timestep;
+
         //printf("Zeit:%f\n",timestep);
         gamma       = findgamma(old, IMAX+2, JMAX+2, timestep, dx, dy);
-        
+
         passby      = new_f_and_g(old,passby,IMAX+2,JMAX+2,dy,dy,timestep,gamma);
         //RHS         = rhs_func(RHS, passby, dx, dy, timestep, IMAX+2, JMAX+2);
+        //printf("\nhere\n");
         RHS         = rhs_func(RHS, passby, dx ,dy ,timestep ,IMAX+2, JMAX+2); 
         old         = new_p(old, RHS, dx, dy, OMEGA, EPSILON, IMAX+2, JMAX+2);
         //printf("\nhello\n");
         old         = newspeed(old, passby,IMAX+2,JMAX+2,dx,dy,timestep,gamma);
         printf("Durchlauf: %d\t Zeit %f \n",i,t);
         i++;
-        
-        if((i%50==0) && (i<1000)){
-            old         = cavity(old,IMAX+2,JMAX+2);
+        if((i%10==0) && (i<1000)){
+            old         = cavity(old,IMAX+2,JMAX+2,i);
             output(old,IMAX+2,JMAX+2);
             printf("output done");
         }
         
         if((i%1000==0) && (i>1000)){
-            old         = cavity(old,IMAX+2,JMAX+2);
+            old         = cavity(old,IMAX+2,JMAX+2,i);
             output(old,IMAX+2,JMAX+2);
             printf("output done");
         }
                 
     }
     //main loop
-    old = cavity(old,IMAX+2,JMAX+2);
+    old = cavity(old,IMAX+2,JMAX+2,i);
     output(old,IMAX+2,JMAX+2);
 
     // FG Randwerte
