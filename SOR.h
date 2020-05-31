@@ -76,9 +76,9 @@ double abs_pres(presit * pres, int imax2, int jmax2){
 rhs_struct *rhs_func( rhs_struct * RHS, f_and_g * fg, double dx, double dy, double dt, int imax2, int jmax2){
 
     // fill the inner values of the RHS
-    for(int j = 1; j < jmax2-1; j++){
-    for(int i = 1; i < imax2-1; i++){
-            RHS[imax2 * j +i].rhs = 1/dt * ((fg[imax2 * j + i].fvalue - fg[imax2 * j + i-1].fvalue) / dx + (fg[imax2 * j + i].gvalue - fg[imax2 * (j - 1) + i].gvalue) / dy);
+    for(int j = 1; j < jmax2; j++){
+    for(int i = 1; i < imax2; i++){
+            RHS[imax2 * j +i].rhs = ((fg[imax2 * j + i].fvalue - fg[imax2 * j + i-1].fvalue) / dx + (fg[imax2 * j + i].gvalue - fg[imax2 * (j - 1) + i].gvalue) / dy)/dt;
         }
     }
 
@@ -90,7 +90,7 @@ return RHS;
 
 //function to caltculate the values of the residuum
 double res_func(double ppi, double p, double pmi, double ppj, double pmj, double dx, double dy,  double rhs ){
-    return (ppi - 2* p + pmi)/pow(dx,2) + (ppj - 2* p + pmj)/pow(dy,2) - rhs;
+    return ((ppi - 2* p + pmi)/pow(dx,2) + (ppj - 2* p + pmj)/pow(dy,2) - rhs);
 }
 
 // returns a struct for the ressiduum 
@@ -98,8 +98,10 @@ res *res_struct(res * res_str, rhs_struct * RHS, presit * pres, double dx, doubl
 
 for(int j = 1; j < jmax2-1; j++){
     for(int i = 1; i < imax2-1; i++){
-        res_str[(j-1)*(imax2-2) + (i-1)].r = res_func(pres[j*imax2 + i + 1].p, pres[j*imax2 + i ].p, pres[j*imax2 + i -1].p, pres[(j+1)*imax2 + i].p, pres[(j-1)*imax2 + i].p, dx, dy, RHS[imax2 * j + i].rhs);
+        res_str[(j)*(imax2) + (i)].r = res_func(pres[j*imax2 + i + 1].p, pres[j*imax2 + i ].p, pres[j*imax2 + i -1].p, pres[(j+1)*imax2 + i].p, pres[(j-1)*imax2 + i].p, dx, dy, RHS[imax2 * j + i].rhs);
+        
     }
+    //printf("resstr:\t%.2f\t",res_str[1000].r);
     }
 return res_str;
 }
@@ -112,7 +114,7 @@ double abs_res(res * resi, int imax2, int jmax2){
 
     for(int j = 0; j < jmax2-2; j++){
         for(int i = 0; i < imax2-2; i++){
-        residuum += pow(resi[(imax2-2)*j+i].r,2.0);
+        residuum += pow(resi[(imax2)*j+i].r,2);
         }
     }
     residuum = sqrt(residuum / ((imax2-2) * (jmax2-2)));
@@ -131,12 +133,12 @@ cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  d
     pres = calloc((imax2)*(jmax2),sizeof(presit)); 
 
     res * res_str; 
-    res_str = calloc((imax2 - 2)*(jmax2 - 2), sizeof(res)); 
+    res_str = calloc((imax2)*(jmax2), sizeof(res)); 
 
     // get p_it from the big struct
     for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
-            pres[imax2*j+i].p = 0;//newp[imax2*j+i].p; 
+            pres[imax2*j+i].p = newp[imax2*j+i].p; 
         }
         }
 
@@ -194,7 +196,8 @@ cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  d
             newp[imax2*j+i].p = pres[imax2*j+i].p; 
             }
             }
-
+    free(pres);
+    free(res_str);
     return newp;
 }
 

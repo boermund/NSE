@@ -5,18 +5,18 @@
 #include <stdlib.h>
 
 
-#define RE      10
-#define A       1.0
-#define B       1.0
-#define IMAX    150
-#define JMAX    150
-#define UMAX    0.01
-#define VMAX    0.01
+#define RE      0.0001
+#define A       100.0
+#define B       100.0
+#define IMAX    150.0
+#define JMAX    150.0
+#define UMAX    1.0
+#define VMAX    1.0
 #define TAU     0.8 //Factor for adaptive step control
 #define OMEGA   1.7 //Relaxation Factor
 #define EPSILON 0.00001
 #define STARTT  0  
-#define STOPT   100
+#define STOPT   0.1
 #define PI      3.14
 #define GY      0
 #define GX      0
@@ -74,6 +74,7 @@ void main(){
     double dx,dy,timestep;
     dx = A/IMAX;
     dy= B/JMAX;
+    printf("%f\t%f\n",dx,dy);
     rhs_struct *RHS;
     RHS = calloc((IMAX+2)*(JMAX+2),sizeof(rhs_struct)); 
     old = fieldalloc(IMAX+2,JMAX+2); //Size of the field plus the edges
@@ -81,7 +82,7 @@ void main(){
     double t = 0;
     int i = 0;
 
-    while(t < STOPT){
+    while(t<STOPT){
         
         old         = cavity(old,IMAX+2,JMAX+2, i);
         timestep    = timecontrol(old,TAU,IMAX+2,JMAX+2,dx,dy,RE);
@@ -93,6 +94,7 @@ void main(){
         passby      = new_f_and_g(old,passby,IMAX+2,JMAX+2,dy,dy,timestep,gamma);
         //RHS         = rhs_func(RHS, passby, dx, dy, timestep, IMAX+2, JMAX+2);
         //printf("\nhere\n");
+        
         RHS         = rhs_func(RHS, passby, dx ,dy ,timestep ,IMAX+2, JMAX+2); 
         old         = new_p(old, RHS, dx, dy, OMEGA, EPSILON, IMAX+2, JMAX+2);
         //printf("\nhello\n");

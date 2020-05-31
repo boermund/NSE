@@ -62,7 +62,7 @@ f_and_g *new_f_and_g(cell*old,f_and_g* newfg,int imax2,int jmax2,double dx,doubl
             if((i+1)%imax2 != 0)
                 newfg[i].fvalue = old[i].u;
             else
-               newfg[i].gvalue = old[i-1].u;
+               newfg[i].fvalue = old[i-1].u;
              
         }
         if((i > 2 * imax2 && (i < imax2 * (jmax2-1))) && (( i % imax2 != 0) && ((i+1) % imax2 != 0)))
