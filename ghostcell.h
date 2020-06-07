@@ -2,7 +2,7 @@
 cell* cavity(cell *field,int imax2, int jmax2,int p)
 {
     double a = 0;
-    double b = 1000;
+    double b = 10;
     /*
     for(int i=0;i<imax2*jmax2;i++){
         field[i].v  = 0.1;

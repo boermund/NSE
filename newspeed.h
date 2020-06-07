@@ -20,7 +20,7 @@ double Gfunction(cell* field,int z,int imax2, int jmax2, double dt, double dx, d
     secondx_d(field[z+imax2].v,field[z].v,field[z-imax2].v,dy)
     ) /RE
     - non_l_quad(field[z+imax2].v,field[z].v,field[z-imax2].v,dy,gamma) 
-    - non_uvx(field[z+imax2].u,field[z].u,field[z-1].u,field[z-1+imax2] .u,dx,field[z+1].v,field[z].v,field[z-1].v,gamma)
+    - non_uvx(field[z+imax2].u,field[z].u,field[z-1].u,field[z-1+imax2].u,dx,field[z+1].v,field[z].v,field[z-1].v,gamma)
     + GY);
     return newG;
 }
@@ -40,8 +40,10 @@ for(int i = 0; i < imax2 * jmax2 ;i++)
         first_d(old[i+imax2].p,old[i].p,dy);
         }
         else{
-            old[i].v=0;
-            old[i].u=0;
+            if(i < imax2)
+                old[i].v=0;
+            if((i+1) % imax2 ==0)
+                old[i].u=0;
         }
         //printf("speed%d:%.2f\t%.2f\n",i,old[i].u,old[i].v);
         //printf("%d:\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t\n",i,newfg[i].fvalue,newfg[i].gvalue,newuv[i].u,newuv[i].v,newuv[i].p);
