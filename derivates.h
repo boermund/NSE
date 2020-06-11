@@ -38,13 +38,13 @@ double non_l_quad(double xpi,double x,double xmi,double dx,double gamma){
 
 // d(uv)/dx
 double non_uvx(double xpj,double x,double xmi,double xmipj,double dx,double ypi,double y,double ymi,double gamma){
-    return 1/dx * ( ( ((x+xpj)/2) * ((y+ypi)/2) )  - ( ((xmi + xmipj)/2) * ((ymi+y)/2) ) ) +
-    gamma * 1/dx * (  ((fabs(x + xpj))/2) * ((y-ypi)/2) - ((fabs(xmi + xmipj))/2) * ((ymi-y)/2) );
+    return 1.0/dx * ( ( ((x+xpj)/2) * ((y+ypi)/2) )  - ( ((xmi + xmipj)/2) * ((ymi+y)/2) ) ) +
+    gamma * 1.0/dx * (  ((fabs(x + xpj))/2) * ((y-ypi)/2) - ((fabs(xmi + xmipj))/2) * ((ymi-y)/2) );
 }
 
 // d(uv)/dy
 double non_uvy(double ypi,double y,double ymj,double ypimj,double dy,double xpj,double x,double xmj,double gamma){
-    return 1/dy * ( ( ((y+ypi)/2) * ((x+xpj)/2) )  - ( ((ymj + ypimj)/2) * ((xmj+x)/2) ) ) +
-    gamma * 1/dy * (  ((fabs(y + ypi))/2) * ((x-xpj)/2) - ((fabs(ymj + ypimj))/2) * ((xmj-x)/2) );
+    return 1.0/dy * ( ( ((y+ypi)/2) * ((x+xpj)/2) )  - ( ((ymj + ypimj)/2) * ((xmj+x)/2) ) ) +
+    gamma * 1.0/dy * (  ((fabs(y + ypi))/2) * ((x-xpj)/2) - ((fabs(ymj + ypimj))/2) * ((xmj-x)/2) );
 
 }
