@@ -1,18 +1,19 @@
 // test the SOR with the elliptical PDG laplace(p(x,y)) = -2p(x,y)
-// the solution is p(x,y) = -exp(x+y)
-// Idea: put righthandside RHS as -2*exp(x+y) [is 1/dt*(diff(F)/dx + diff(G)/dy) in equation (41)) and solve the equation with a startvector p_(it=0)
-//c 
+// the solution is p(x,y) = sin(x+y)
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>  
+#include <sys/time.h>
 
 //define the constants
-#define IMAX    5
-#define JMAX    10  //length of the lattice(begins at zero)
-#define XMAX    1//length of the lattice(begins at zero)
-#define YMAX    1
-#define OM      1.8
-#define EPS     0.2
+#define IMAX    140
+#define JMAX    140
+#define XMAX    1.5
+#define YMAX    1.5
+#define OM      1.7
+#define EPS     0.00001 
 
 /* 
 filling of the latice with IMAX = 2, JMAX = 3
@@ -24,35 +25,35 @@ filling of the latice with IMAX = 2, JMAX = 3
 // define structs
 typedef struct 
 {
-    float r;  
+    double r;  
 } res;
 
 typedef struct 
 {
-    float p;  
+    double p;  
 } presit;
 
 typedef struct 
 {
-    float rhs;  
+    double rhs;  
 } rhs_struct;
 
 typedef struct 
 {
-    float fvalue;
-    float gvalue;  
+    double fvalue;
+    double gvalue;  
 } f_and_g;
 
 typedef struct
 {
-    float p;
-    float u;
-    float v;
+    double p;
+    double u;
+    double v;
 } cell;
 
 typedef struct 
 {
-    float e;  
+    double e;  
 } ellip;
 
 typedef struct 
@@ -61,12 +62,26 @@ typedef struct
     double y;   
 } xyel;
 
+typedef struct 
+{
+    double er;  
+} error;
+
+
+
 // include the functions that we need
-#include "SOR.h"
+#include "SOR_testDGL.h"
 #include "test_DGL.h"
 
 // begin mainfunction
 void main(){
+
+
+// to meassure the time
+time_t start, stop;
+double diff;
+
+start=time(NULL);
 
 // define IMX, JMAx plus the Boundaries
 int imax2, jmax2; 
@@ -74,25 +89,14 @@ imax2 = IMAX + 2;
 jmax2 = JMAX + 2;
 
 // calculate dx, dy
-float dx, dy;
-dx  = (float)(XMAX)/(float)IMAX;
-dy = (float)(YMAX)/(float)JMAX; 
+double dx, dy;
+dx  = (double)(XMAX)/(double)IMAX;
+dy = (double)(YMAX)/(double)JMAX; 
 
 // define the struct for x,y values and calculate them
 xyel *xy;
 xy = calloc((IMAX+2)*(JMAX+2),sizeof(xyel));
 xy = xyvalues(xy, dx, dy, imax2, jmax2);
-
-
-//print them
-/*printf("\nxyvalues\n");
-for(int j =0; j < jmax2; j++){
-        for(int i = 0; i < imax2; i++){
-            printf("x: %.6f\t y: %.6f\t", xy[j*imax2 + i].x, xy[j*imax2 + i].y);
-        }
-        printf("\n");
-    }*/
-
 
 // put x and y values into a file
 FILE * xval;
@@ -116,17 +120,6 @@ ellip * testel;
 testel = calloc((IMAX+2)*(JMAX+2),sizeof(ellip));
 testel = ellipt_struct(testel, xy, imax2, jmax2);
 
-
-//print them
-/*printf("values sin(x+y)\n");
-for(int j =0; j < jmax2; j++){
-        for(int i = 0; i < imax2; i++){
-            printf("%.6f\t", testel[j*imax2 + i].e);
-        }
-        printf("\n");
-    }*/
-
-
 // put the analytical values into a file
 FILE * p_ana;
     p_ana = fopen("p_ana.txt", "w+");
@@ -137,38 +130,38 @@ FILE * p_ana;
         }
         fprintf(p_ana, "\n");
         }
-
 fclose(p_ana);
-
-//define the struct for the RHS
-rhs_struct * RHS; 
-RHS = calloc((IMAX+2)*(JMAX+2),sizeof(rhs_struct));
-
-//define cell (it has 3 values (u,v,p) and we need it for in the right algrorithm. the aim of the SOR is to give the p value of the cell back)
-// What would be the first pressure I have to put in (p_(it=0))
-    // Options: calculatet of the testfunction; everithing is zero, everything  except the boundaries are zero, everything has a value except the boundaries (they are zero) 
-    // here I choose the third option
-
 
 cell * h; 
 h = calloc((IMAX+2)*(JMAX+2),sizeof(cell));
 
-
-
+// put on the values for boundaries and p^(it=0)
+// boundaries
 for(int j =0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
-            h[j*imax2 + i].p = testel[j*imax2 + i].e - 0.1;
+            h[j*imax2 + i].p = testel[j*imax2 + i].e;
         }
 }
 
-
-// fill the start pressure with zeros
-/*for(int j =0; j < jmax2; j++){
-        for(int i = 0; i < imax2; i++){
-            h[j*imax2 + i].p = 0.1;
+// fill the inner cells
+for(int j =1; j < jmax2-1; j++){
+        for(int i = 1; i < imax2-1; i++){
+            h[j*imax2 + i].p = 0;
+            //h[j*imax2 + i].p = 1;
+            //h[j*imax2 + i].p = -1;
+            //h[j*imax2 + i].p = 2;
+            //h[j*imax2 + i].p = testel[j*imax2 + i].e;
+            //h[j*imax2 + i].p = testel[j*imax2 + i].e + 0.01;
+            //h[j*imax2 + i].p = testel[j*imax2 + i].e + 1;
+            //h[j*imax2 + i].p = -100;
+            //h[j*imax2 + i].p =  100;
+            //h[j*imax2 + i].p = testel[j*imax2 + i].e + 100;
         }
-    }*/
+}  
 
+//define the struct for the RHS
+rhs_struct * RHS; 
+RHS = calloc((IMAX+2)*(JMAX+2),sizeof(rhs_struct));
 
 // fill RHS with the first values of pressure (same one like the first one of the cell)
 for(int j =0; j < jmax2; j++){
@@ -177,62 +170,42 @@ for(int j =0; j < jmax2; j++){
         }
     }
 
-/*
+// second struct for a constant rhs to calculate the residuum
+rhs_struct * RHS2; 
+RHS2 = calloc((IMAX+2)*(JMAX+2),sizeof(rhs_struct));
+
 for(int j =0; j < jmax2; j++){
-        for(int i = 0; i < imax2; i++){
-            RHS[j*imax2 + i].rhs =-2* 0.1;
-        }
+    for(int i = 0; i < imax2; i++){
+        RHS2[j*imax2 + i].rhs = -2*testel[j*imax2 + i].e;
     }
-*/
-
-// print pressure
-
-/*
-printf("\npressure 0\n");
-for(int j = 0; j < jmax2; j++){
-        for(int i = 0; i < imax2; i++){
-           
-            printf(" %.6f\t", h[imax2*j+i].p);
-        }
-        printf("\n");
-        }*/
-
-
-// print RHS
-/*
-printf("\nRHS\n");
-for(int j = 0; j < jmax2; j++){
-        for(int i = 0; i < imax2; i++){
-            printf(" %.6f\t", RHS[imax2*j+i].rhs);
-        }
-        printf("\n");
-        }
-*/
+}
 
 // SOR: calculate the new pressure and put it in the cell
-h = new_p(h,RHS, dx, dy, OM, EPS, imax2, jmax2);
+h = new_p(h,RHS, dx, dy, OM, EPS, imax2, jmax2, RHS2);
+
+//calculate time
+diff=difftime(stop=time(NULL),start);
+printf("Zeit: %.2f sec\n",diff);
+printf("Zeit: %.2f min\n",diff/60);
+
+// calculate error
+double fehler = 0;
+fehler = abs_error(h, testel, imax2, jmax2);
+printf("Fehler für Konvergenzordnung: %.8f\n", fehler);
+
+// to colculate the order of convergenz, you have to calculate the error 
+//two times for two dx/dy and do it analytical
 
 //print the new_p an put them in to a txt file
 FILE * newp;
     newp = fopen("new_p.txt", "w+");
-
-//as I understand, it has to be -exp(x+y) with the values we already calculated
-
-printf("\nNew pressure/ solve of the PDG\n");
+//printf("\nNew pressure/ solve of the PDG\n");
 for(int j = 0; j < jmax2; j++){
         for(int i = 0; i < imax2; i++){
-          //  printf(" %.6f\t", h[imax2*j+i].p);
             fprintf(newp, " %.6f\t", h[imax2*j+i].p);
         }
-        //printf("\n");
         fprintf(newp, "\n");
         }
-
 fclose(newp);
-
-// problem if we observe the SOR: 
-    // error of the residuum ist constant, pressure rises very fast and becomes to big
-    // problem if we choose the first option of the pressure p_it=0: abs(p_it =0) = 0 and t the alorithm doesnt't end
-    // try it with different values for epsilon and omega and different values for IMAX, JMax to get smaller dx, dy
 
 }
