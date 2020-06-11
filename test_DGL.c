@@ -4,10 +4,12 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>  
+#include <sys/time.h>
 
 //define the constants
-#define IMAX    100
-#define JMAX    100
+#define IMAX    140
+#define JMAX    140
 #define XMAX    1.5
 #define YMAX    1.5
 #define OM      1.7
@@ -60,12 +62,26 @@ typedef struct
     double y;   
 } xyel;
 
+typedef struct 
+{
+    double er;  
+} error;
+
+
+
 // include the functions that we need
 #include "SOR_testDGL.h"
 #include "test_DGL.h"
 
 // begin mainfunction
 void main(){
+
+
+// to meassure the time
+time_t start, stop;
+double diff;
+
+start=time(NULL);
 
 // define IMX, JMAx plus the Boundaries
 int imax2, jmax2; 
@@ -132,9 +148,14 @@ for(int j =1; j < jmax2-1; j++){
         for(int i = 1; i < imax2-1; i++){
             h[j*imax2 + i].p = 0;
             //h[j*imax2 + i].p = 1;
+            //h[j*imax2 + i].p = -1;
             //h[j*imax2 + i].p = 2;
-            //h[j*imax2 + i].p = 2;
-            //h[j*imax2 + i].p = testel[j*imax2 + i].e + 0.1;
+            //h[j*imax2 + i].p = testel[j*imax2 + i].e;
+            //h[j*imax2 + i].p = testel[j*imax2 + i].e + 0.01;
+            //h[j*imax2 + i].p = testel[j*imax2 + i].e + 1;
+            //h[j*imax2 + i].p = -100;
+            //h[j*imax2 + i].p =  100;
+            //h[j*imax2 + i].p = testel[j*imax2 + i].e + 100;
         }
 }  
 
@@ -161,6 +182,19 @@ for(int j =0; j < jmax2; j++){
 
 // SOR: calculate the new pressure and put it in the cell
 h = new_p(h,RHS, dx, dy, OM, EPS, imax2, jmax2, RHS2);
+
+//calculate time
+diff=difftime(stop=time(NULL),start);
+printf("Zeit: %.2f sec\n",diff);
+printf("Zeit: %.2f min\n",diff/60);
+
+// calculate error
+double fehler = 0;
+fehler = abs_error(h, testel, imax2, jmax2);
+printf("Fehler für Konvergenzordnung: %.8f\n", fehler);
+
+// to colculate the order of convergenz, you have to calculate the error 
+//two times for two dx/dy and do it analytical
 
 //print the new_p an put them in to a txt file
 FILE * newp;

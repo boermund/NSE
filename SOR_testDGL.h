@@ -72,7 +72,6 @@ double res_func(double ppi, double p, double pmi, double ppj, double pmj, double
 // returns a struct for the ressiduum 
 res *res_struct(res * res_str, rhs_struct * RHS2, presit * pres, double dx, double dy, int imax2, int jmax2){
 
-//printf("\nresstruct\n");
 for(int j = 1; j < jmax2-1; j++){
     for(int i = 1; i < imax2-1; i++){
         res_str[(j-1)*(imax2-2) + (i-1)].r = res_func(pres[j*imax2 + i + 1].p, pres[j*imax2 + i ].p, pres[j*imax2 + i - 1].p, pres[(j+1)*imax2 + i].p, pres[(j-1)*imax2 + i].p, dx, dy, RHS2[imax2 * j + i].rhs);
@@ -118,7 +117,7 @@ cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  d
 
     double abs_pres0 = 0;
     abs_pres0 = abs_pres(pres, imax2, jmax2);
-    printf("\nabspres0: %.6f\n", abs_pres0);
+    printf("\nBetrag Anfangsdruck: %.6f\n", abs_pres0);
 
     // choose a barrier for the end of the do-loop
     double barrier;
@@ -157,18 +156,25 @@ cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  d
 
         // abs of residuum 
         absres = abs_res(res_str, imax2, jmax2);
-        printf(" \nabsres: %.6f\n", absres);
+
+        if(i%500==0){
+        printf("Betrag Residuum: %f \t",  absres);
+        printf("%d\n", i);
+        }
         
         //test the first two iterations
         i+=1;
-        printf("%d\n", i);
+        
         // end of while loop
-    }while(absres > barrier);
+    }while(absres > 0.00001);
 
     //}while(i<10000);
 
- printf("abs_pres0: %.14f", abs_pres0);
- printf(" \nabsres: %.6f\n", absres);
+ 
+ printf(" \nBetrag Residuum: %.6f\n", absres);
+ printf("Barrier: %.6f\n", barrier);
+ printf("i = %d\n", i);
+
     // put the new pressure values into the cell
     for(int j = 0; j < jmax2; j++){
             for(int i = 0; i < imax2; i++){
@@ -177,6 +183,50 @@ cell *new_p(cell * newp, rhs_struct *RHS, double dx, double dy, double omega,  d
             }
 
     return newp;
+}
+
+
+///////////////////////////////////
+// rate of convergence
+
+double abs_error( cell * h, ellip * testel, int imax2, int jmax2){
+    // 
+    error * f; 
+    f = calloc((IMAX+2)*(JMAX+2),sizeof(error));
+
+    for(int j =0; j < jmax2; j++){
+        for(int i = 0; i < imax2; i++){
+            f[j*imax2 + i].er = fabs(h[j*imax2 + i].p  - testel[j*imax2 + i].e);
+        }
+    }
+
+
+ // error with L2 norm    
+    double fehler = 0;
+    for(int j = 1; j < jmax2-1; j++){
+        for(int i = 1; i < imax2-1; i++){
+        fehler += pow(f[(imax2-2)*j+i].er,2.0);
+        }
+    }
+
+    fehler = sqrt(fehler / ((imax2-2) * (jmax2-2)));
+
+    float fehler2 = 0;
+
+// error with Max Norm (fehler2)
+    for(int j =1; j < jmax2-1; j++){
+        for(int i = 1; i < imax2-1; i++){
+           if  (f[j*imax2 + i].er > fehler2){
+               fehler2 = f[j*imax2 + i].er;
+           }
+            else
+            {
+                continue;
+            }
+        }
+    }
+    // choose the error wich should be return (fehler or fehler2)
+    return fehler;
 }
 
 
