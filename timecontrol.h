@@ -1,6 +1,6 @@
 #include <math.h>
 
-cell max_field(cell *field,int imax2, int jmax2){
+cell max_field(cell *field,int imax2, int jmax2){ //Get the maximum values from the field
     cell max;
     max.p=max.u=max.v=0;
     for(int i=0 ; i<imax2*jmax2;i++)
@@ -23,7 +23,7 @@ cell max_field(cell *field,int imax2, int jmax2){
     return max;
 }
 
-double min(double a, double b, double c){
+double min(double a, double b, double c){ //Get the minimum of three values.
     double min   = a;
     if(min>b)
         min     = b;
@@ -33,7 +33,7 @@ double min(double a, double b, double c){
 }
 
 
-double timecontrol(cell* feld,double tau,int imax2,int jmax2,double dx, double dy,double Re){
+double timecontrol(cell* feld,double tau,int imax2,int jmax2,double dx, double dy,double Re){ //Adaptive Time Control, Returns the new time step
     cell max =  max_field(feld,imax2, jmax2);
     double newtime;
     newtime =   tau * min(dx/fabs(max.u),dy/fabs(max.v),Re/2*1/(pow(dx,-2)+pow(dy,-2)));

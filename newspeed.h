@@ -1,4 +1,4 @@
-double Ffunction(cell* field,int z,int imax2, int jmax2, double dt, double dx, double dy,double gamma){
+double Ffunction(cell* field,int z,int imax2, int jmax2, double dt, double dx, double dy,double gamma){ //Calculate the values for F
     double newF = field[z].u
     + dt*(
     (
@@ -26,11 +26,10 @@ double Gfunction(cell* field,int z,int imax2, int jmax2, double dt, double dx, d
 }
 
 cell *newspeed(cell*old,f_and_g *newfg,int imax2,int jmax2,double dx,double dy,double dt, double gamma){
-    //Zwei kleiner weil die Randwertew fehlen
+    //Calculte the new values for speed
     
 for(int i = 0; i < imax2 * jmax2 ;i++)
     {
-        //if((i>imax2+1 && (i<imax2*(jmax2-1)))&&((i%imax2!=0)&&(i*imax2!=imax2-1))){
         if((i < (imax2 * (jmax2 - 1))) && ((i+1) % imax2 != 0)){
         old[i].u = newfg[i].fvalue -
         dt *
@@ -45,29 +44,24 @@ for(int i = 0; i < imax2 * jmax2 ;i++)
             if((i+1) % imax2 ==0)
                 old[i].u=0;
         }
-        //printf("speed%d:%.2f\t%.2f\n",i,old[i].u,old[i].v);
-        //printf("%d:\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t\n",i,newfg[i].fvalue,newfg[i].gvalue,newuv[i].u,newuv[i].v,newuv[i].p);
-        //output(new,imax2+2,jmax2+2);
     }
     return old;
 }
 
 f_and_g *new_f_and_g(cell*old,f_and_g* newfg,int imax2,int jmax2,double dx,double dy,double dt, double gamma){
-    //f_and_g *newfg; //In deiner Funktion wieder frei machen
-    //newfg = calloc((imax2)*(jmax2),sizeof(f_and_g)); //Zwei kleiner weil die Randwertew fehlen
     for(int i = 0; i < imax2 * jmax2 ;i++)
     {
         if((i > 1 * imax2 && (i < imax2 * (jmax2 - 1))) && ((i % imax2 != 0) && (((i+2) % imax2 != 0) && ((i+1) % imax2 != 0)))){
-            newfg[i].fvalue = Ffunction(old,i,imax2,jmax2,dt,dx,dy,gamma); //Ableitung benötigt Werte die eigentlich ausserhalb von Rand liegen
+            newfg[i].fvalue = Ffunction(old,i,imax2,jmax2,dt,dx,dy,gamma); //Derivations need values that are next to the one you want
         }
         else{
-            if((i+1)%imax2 != 0)
+            if((i+1)%imax2 != 0) //Exclude those Values
                 newfg[i].fvalue = old[i].u;
             else
-               newfg[i].fvalue = old[i-1].u;
+               newfg[i].fvalue = old[i-1].u;//Does not have a real meaning. Is set to the same value 
              
         }
-        if((i > 2 * imax2 && (i < imax2 * (jmax2-1))) && (( i % imax2 != 0) && ((i+1) % imax2 != 0)))
+        if((i > 2 * imax2 && (i < imax2 * (jmax2-1))) && (( i % imax2 != 0) && ((i+1) % imax2 != 0))) //Same as above
         {
             newfg[i].gvalue = Gfunction(old,i,imax2,jmax2,dt,dx,dy,gamma); 
         }
@@ -80,15 +74,7 @@ f_and_g *new_f_and_g(cell*old,f_and_g* newfg,int imax2,int jmax2,double dx,doubl
         }
         
         
-        //printf("%d:\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t\n",i,newfg[i].fvalue,newfg[i].gvalue,newuv[i].u,newuv[i].v,newuv[i].p);
-        //output(new,imax2+2,jmax2+2);
-        
-        //printf("%d:%.2f\t%.2f\n",i,newfg[i].fvalue,newfg[i].gvalue);
     }
-    //printf("f&g:");
-    //for(int i=0;i<imax2*jmax2;i++){
-    //printf("%d:%.2f\t%.2f\n",i,newfg[i].fvalue,newfg[i].gvalue);
-    //}
 
     return newfg;
 }

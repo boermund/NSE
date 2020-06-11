@@ -1,5 +1,5 @@
 //Functions for output of data
-
+//Print the u,v and p in three diffrent files.
 void output(cell *field,int imax2,int jmax2)
 {   
     printf("hello1\n");
