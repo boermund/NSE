@@ -5,15 +5,14 @@
 #include <stdlib.h>
 
 // function wich solve the DGL
-float ellipt(float x, float y){
+double ellipt(double x, double y){
     return sin(x+y);
-
 }
 
 // returns a struct with the xy values to calculate the analytical pressure
-xyel * xyvalues(xyel* xy, float dx, float dy, int imax2, int jmax2){
+xyel * xyvalues(xyel* xy, double dx, double dy, int imax2, int jmax2){
 
-    float xval, yval;
+    double xval, yval;
     xval = -0.5 * dx;
     yval = -0.5 * dy;
 
